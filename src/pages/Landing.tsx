@@ -49,12 +49,9 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <Button variant="hero" size="xl" asChild>
               <Link to="/dang-ky">
-                Bắt đầu miễn phí
+                Bắt đầu học ngay
                 <ArrowRight className="h-4 w-4 ml-1" />
               </Link>
-            </Button>
-            <Button variant="hero-outline" size="xl" asChild>
-              <Link to="/gia">Xem bảng giá</Link>
             </Button>
           </div>
         </div>
@@ -133,9 +130,9 @@ export default function Landing() {
             </Link>
           </Button>
           <div className="flex items-center justify-center gap-4 text-body-sm text-muted-foreground">
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Miễn phí</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Không cần thẻ</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Huỷ bất kỳ lúc nào</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Toàn diện</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Cá nhân hoá</span>
+            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Trợ lý AI</span>
           </div>
         </div>
       </section>

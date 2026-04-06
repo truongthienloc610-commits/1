@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Sparkles } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { label: "Tính năng", href: "/#features" },
-  { label: "Giá", href: "/gia" },
 ];
 
 export function PublicNavbar() {
@@ -36,18 +36,22 @@ export function PublicNavbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <Button variant="ghost" size="sm" asChild>
             <Link to="/dang-nhap">Đăng nhập</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link to="/dang-ky">Bắt đầu miễn phí</Link>
+            <Link to="/dang-ky">Bắt đầu học ngay</Link>
           </Button>
         </div>
 
-        {/* Mobile toggle */}
-        <button className="md:hidden p-2" onClick={() => setOpen(!open)} aria-label="Menu">
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          {/* Mobile toggle */}
+          <button className="p-2" onClick={() => setOpen(!open)} aria-label="Menu">
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -69,7 +73,7 @@ export function PublicNavbar() {
               <Link to="/dang-nhap" onClick={() => setOpen(false)}>Đăng nhập</Link>
             </Button>
             <Button asChild>
-              <Link to="/dang-ky" onClick={() => setOpen(false)}>Bắt đầu miễn phí</Link>
+              <Link to="/dang-ky" onClick={() => setOpen(false)}>Bắt đầu học ngay</Link>
             </Button>
           </nav>
         </div>

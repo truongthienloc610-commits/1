@@ -21,7 +21,6 @@ export function PublicFooter() {
               <h4 className="font-semibold text-body-sm">Sản phẩm</h4>
               <nav className="flex flex-col gap-2 text-body-sm text-muted-foreground">
                 <Link to="/#features" className="hover:text-foreground transition-colors">Tính năng</Link>
-                <Link to="/gia" className="hover:text-foreground transition-colors">Bảng giá</Link>
               </nav>
             </div>
             <div className="space-y-3">
