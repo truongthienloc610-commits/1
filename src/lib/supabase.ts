@@ -14,6 +14,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * Đối tượng này được dùng để tương tác với Database, Auth, Storage...
  */
 export const supabase = createClient(
-  supabaseUrl || "https://placeholder-project.supabase.co",
-  supabaseAnonKey || "placeholder-anon-key"
+  supabaseUrl,
+  supabaseAnonKey
 );
