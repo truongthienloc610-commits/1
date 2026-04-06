@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Sparkles, Eye, EyeOff } from "lucide-react";
+import { Code2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
@@ -76,16 +76,17 @@ export default function Register() {
 
   return (
     <div className="auth-container">
-      {/* 1. Phần FORM bên trái */}
       <div className="auth-form-side">
         <div className="auth-form-wrapper space-y-6 px-4 py-8">
           <div className="space-y-2">
-            <Link to="/" className="inline-flex items-center gap-2 font-bold text-2xl text-primary mb-2">
-              <Sparkles className="h-8 w-8" />
-              HọcAI
+            <Link to="/" className="inline-flex items-center gap-2 font-extrabold text-2xl tracking-tight text-slate-900 mb-2 transition-transform hover:scale-105">
+              <div className="bg-blue-600 h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <Code2 className="h-5 w-5" />
+              </div>
+              EduAI
             </Link>
             <h1 className="text-3xl font-extrabold tracking-tight">Tạo tài khoản</h1>
-            <p className="text-muted-foreground">Bắt đầu hành trình học tập thông minh ngay hôm nay.</p>
+            <p className="text-muted-foreground">Bắt đầu hành trình học tập thông minh ngay hôm nay cùng EduAI.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -194,7 +195,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* 2. Phần MINH HỌA bên phải */}
       <div className="auth-illustration-side animate-fade-in">
         <AuthIllustration />
       </div>

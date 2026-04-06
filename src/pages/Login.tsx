@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles, Eye, EyeOff } from "lucide-react";
+import { Code2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { AuthIllustration } from "@/components/AuthIllustration";
-import "@/styles/auth.css"; // Import styles mới
+import "@/styles/auth.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -56,16 +56,17 @@ export default function Login() {
 
   return (
     <div className="auth-container">
-      {/* 1. Phần FORM bên trái */}
       <div className="auth-form-side">
         <div className="auth-form-wrapper space-y-8 px-4">
           <div className="space-y-2">
-            <Link to="/" className="inline-flex items-center gap-2 font-bold text-2xl text-primary mb-4">
-              <Sparkles className="h-8 w-8" />
-              HọcAI
+            <Link to="/" className="inline-flex items-center gap-2 font-extrabold text-2xl tracking-tight text-slate-900 mb-4 transition-transform hover:scale-105">
+              <div className="bg-blue-600 h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <Code2 className="h-5 w-5" />
+              </div>
+              EduAI
             </Link>
             <h1 className="text-3xl font-extrabold tracking-tight">Chào mừng bạn!</h1>
-            <p className="text-muted-foreground">Tiếp tục hành trình chinh phục tri thức cùng HọcAI.</p>
+            <p className="text-muted-foreground">Tiếp tục hành trình chinh phục tri thức cùng EduAI.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -143,7 +144,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* 2. Phần MINH HỌA bên phải */}
       <div className="auth-illustration-side animate-fade-in">
         <AuthIllustration />
       </div>

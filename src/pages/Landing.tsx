@@ -47,7 +47,7 @@ export default function Landing() {
                 <Star className="h-4 w-4 fill-blue-600" /> AI-powered Education Platform
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight animate-in fade-in slide-in-from-left-6 duration-1000">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-slate-900 leading-tight lg:leading-[1.15] tracking-tight animate-in fade-in slide-in-from-left-6 duration-1000">
                 Nâng tầm tri thức <br />
                 <span className="text-gradient-blue">Bằng sức mạnh AI</span>
               </h1>
@@ -64,9 +64,9 @@ export default function Landing() {
                   </Link>
                 </Button>
                 <Button size="lg" variant="ghost" className="h-14 px-8 text-lg text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition-all" asChild>
-                  <Link to="/#features">
+                  <a href="#features">
                     Tìm hiểu thêm
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function Landing() {
       </section>
 
       {/* Trust & Transition Section */}
-      <section className="py-32 bg-white relative overflow-hidden">
+      <section id="about" className="py-32 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">

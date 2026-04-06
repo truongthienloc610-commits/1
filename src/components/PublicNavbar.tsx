@@ -5,9 +5,9 @@ import { Menu, X, Code2 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
-  { label: "Về chúng tôi", href: "/#about" },
-  { label: "Sản phẩm", href: "/#products" },
-  { label: "Báo cáo sự cố", href: "/#report" },
+  { label: "Về chúng tôi", href: "#about" },
+  { label: "Sản phẩm", href: "#features" },
+  { label: "Báo cáo sự cố", href: "#report" },
 ];
 
 export function PublicNavbar() {
@@ -28,15 +28,13 @@ export function PublicNavbar() {
         {/* Desktop nav - Centered */}
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
           {navItems.map((item) => (
-            <Link
+            <a
               key={item.label}
-              to={item.href}
-              className={`text-sm font-semibold transition-all hover:text-blue-600 ${
-                location.pathname === item.href ? "text-blue-600" : "text-slate-500"
-              }`}
+              href={item.href}
+              className="text-sm font-semibold text-slate-500 transition-all hover:text-blue-600"
             >
               {item.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -65,14 +63,14 @@ export function PublicNavbar() {
         <div className="md:hidden border-t border-slate-100 bg-white p-6 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
           <nav className="flex flex-col gap-4">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.label}
-                to={item.href}
+                href={item.href}
                 className="text-lg font-bold text-slate-900 py-2 hover:text-blue-600"
                 onClick={() => setOpen(false)}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
             <div className="h-px bg-slate-100 my-2" />
             <Button variant="ghost" asChild className="justify-start text-lg font-bold text-slate-900 px-0">
