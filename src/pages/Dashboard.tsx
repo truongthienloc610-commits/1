@@ -1,247 +1,238 @@
 import { AppLayout } from "@/components/AppLayout";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRoadmaps } from "@/hooks/useRoadmap";
-import { useAIConversations } from "@/hooks/useAIChat";
-import { useExamSessions } from "@/hooks/useExams";
-import { useStudyLogs } from "@/hooks/useStudyLogs";
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
-} from "recharts";
-import {
-  Flame, Clock, Target, FileText, Bot, Map, ArrowRight,
-  TrendingUp, Star, BookOpen,
+import { useState, useEffect } from "react";
+import { 
+  Flame, CheckCircle2, Circle, ListTodo, Map, 
+  ArrowRight, BookOpen, Clock, Zap, Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
+
+interface Todo {
+  id: string;
+  task: string;
+  is_completed: boolean;
+}
 
 export default function Dashboard() {
   const { profile } = useAuth();
-  const { data: roadmaps = [] } = useRoadmaps();
-  const { data: conversations = [] } = useAIConversations();
-  const { data: sessions = [] } = useExamSessions();
-  const { dailyData, calculatedTotalMinutes, calculatedStreak } = useStudyLogs();
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  const completedExams = sessions.filter((s) => s.status === "completed");
-  const avgScore = completedExams.length
-    ? Math.round(completedExams.reduce((s, e) => s + (e.score_pct ?? 0), 0) / completedExams.length)
-    : 0;
+  // Fetch todos
+  useEffect(() => {
+    if (profile?.id) {
+      fetchTodos();
+    }
+  }, [profile?.id]);
 
-  const displayStreak = Math.max(calculatedStreak, profile?.streak_days ?? 0);
-  const displayMinutes = Math.max(calculatedTotalMinutes, profile?.total_study_minutes ?? 0);
+  async function fetchTodos() {
+    const { data, error } = await supabase
+      .from('edu_todos')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error("Error fetching todos:", error);
+    } else {
+      setTodos(data || []);
+    }
+    setLoading(false);
+  }
 
-  const greeting = () => {
-    const h = new Date().getHours();
-    if (h < 12) return "Chào buổi sáng";
-    if (h < 18) return "Chào buổi chiều";
-    return "Chào buổi tối";
-  };
+  async function addTodo() {
+    if (!newTodo.trim()) return;
+    const { data, error } = await supabase
+      .from('edu_todos')
+      .insert([{ user_id: profile?.id, task: newTodo }])
+      .select()
+      .single();
 
-  const stats = [
-    {
-      label: "Chuỗi học",
-      value: `${displayStreak} ngày`,
-      icon: Flame,
-      color: "text-orange-500",
-      bg: "bg-orange-50 dark:bg-orange-950/30",
-    },
-    {
-      label: "Tổng giờ học",
-      value: `${Math.floor(displayMinutes / 60)}h${displayMinutes % 60}m`,
-      icon: Clock,
-      color: "text-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-950/30",
-    },
-    {
-      label: "Lộ trình",
-      value: `${roadmaps.length} môn`,
-      icon: Map,
-      color: "text-green-500",
-      bg: "bg-green-50 dark:bg-green-950/30",
-    },
-    {
-      label: "Điểm TB",
-      value: completedExams.length ? `${avgScore}%` : "–",
-      icon: Star,
-      color: "text-yellow-500",
-      bg: "bg-yellow-50 dark:bg-yellow-950/30",
-    },
-  ];
+    if (error) {
+        toast.error("Không thể thêm nhiệm vụ");
+    } else {
+      setTodos([data, ...todos]);
+      setNewTodo("");
+      toast.success("Đã thêm nhiệm vụ");
+    }
+  }
 
-  const maxMinutes = Math.max(...dailyData.map((d) => d.minutes), 1);
+  async function toggleTodo(id: string, currentStatus: boolean) {
+    const { error } = await supabase
+      .from('edu_todos')
+      .update({ is_completed: !currentStatus })
+      .eq('id', id);
+
+    if (error) {
+      toast.error("Lỗi cập nhật");
+    } else {
+      setTodos(todos.map(t => t.id === id ? { ...t, is_completed: !currentStatus } : t));
+    }
+  }
+
+  const pendingTodos = todos.filter(t => !t.is_completed);
+  const completedTodos = todos.filter(t => t.is_completed);
 
   return (
     <AppLayout>
-      {/* Page header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">
-          {greeting()}, {profile?.full_name?.split(" ").at(-1) ?? "bạn"}! 👋
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          {new Date().toLocaleDateString("vi-VN", { weekday: "long", day: "numeric", month: "long" })}
-        </p>
-      </div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-card border rounded-xl p-4 flex flex-col gap-3">
-            <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center", s.bg)}>
-              <s.icon className={cn("h-4 w-4", s.color)} />
+      <div className="max-w-5xl mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              Chào {profile?.full_name?.split(" ").at(-1) ?? "bạn"}! 👋
+            </h1>
+            <p className="text-slate-500 mt-1 font-medium">
+              Bạn đang làm rất tốt. Hãy tiếp tục giữ vững phong độ nhé!
+            </p>
+          </div>
+          <div className="flex items-center gap-4 bg-blue-50 border border-blue-100 px-6 py-4 rounded-2xl shadow-sm">
+            <div className="h-12 w-12 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+              <Flame className="h-6 w-6 fill-current" />
             </div>
             <div>
-              <p className="text-2xl font-bold">{s.value}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
+              <p className="text-sm font-bold text-blue-600 uppercase tracking-wider">Chuỗi học tập</p>
+              <p className="text-2xl font-black text-slate-900">{profile?.streak_count ?? 0} ngày</p>
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-5">
-        {/* Study chart */}
-        <div className="lg:col-span-2 bg-card border rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-sm">Thời gian học 7 ngày qua</h2>
-            <span className="text-xs text-muted-foreground flex items-center gap-1">
-              <TrendingUp className="h-3 w-3" />
-              phút/ngày
-            </span>
-          </div>
-          {dailyData.every((d) => d.minutes === 0) ? (
-            <div className="h-36 flex flex-col items-center justify-center text-muted-foreground gap-2">
-              <BookOpen className="h-8 w-8 opacity-30" />
-              <p className="text-sm">Chưa có dữ liệu học tập</p>
-            </div>
-          ) : (
-            <ResponsiveContainer width="100%" height={140}>
-              <BarChart data={dailyData} barSize={24}>
-                <XAxis
-                  dataKey="label"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis hide />
-                <Tooltip
-                  cursor={{ fill: "hsl(var(--muted))" }}
-                  content={({ active, payload, label }) =>
-                    active && payload?.length ? (
-                      <div className="bg-popover border rounded-lg px-3 py-2 text-xs shadow-md">
-                        <p className="font-medium">{label}</p>
-                        <p className="text-primary">{payload[0].value} phút</p>
-                      </div>
-                    ) : null
-                  }
-                />
-                <Bar dataKey="minutes" radius={[4, 4, 0, 0]}>
-                  {dailyData.map((d, i) => (
-                    <Cell
-                      key={i}
-                      fill={d.minutes === maxMinutes ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.25)"}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          )}
-        </div>
-
-        {/* Quick actions */}
-        <div className="bg-card border rounded-xl p-5">
-          <h2 className="font-semibold text-sm mb-4">Bắt đầu nhanh</h2>
-          <div className="space-y-2">
-            {[
-              { to: "/lo-trinh", icon: Map, label: "Xem lộ trình học", color: "text-green-500" },
-              { to: "/hoi-ai", icon: Bot, label: "Hỏi AI học bài", color: "text-blue-500" },
-              { to: "/luyen-de", icon: FileText, label: "Làm đề thi", color: "text-purple-500" },
-            ].map((a) => (
-              <Link
-                key={a.to}
-                to={a.to}
-                className="flex items-center gap-3 rounded-lg p-3 hover:bg-muted transition-colors group"
-              >
-                <a.icon className={cn("h-4 w-4 shrink-0", a.color)} />
-                <span className="text-sm font-medium flex-1">{a.label}</span>
-                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-            ))}
           </div>
         </div>
 
-        {/* Roadmaps preview */}
-        <div className="bg-card border rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-sm">Lộ trình của bạn</h2>
-            <Button variant="ghost" size="sm" asChild className="text-xs h-7">
-              <Link to="/lo-trinh">Xem tất cả</Link>
-            </Button>
-          </div>
-          {roadmaps.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-6 text-center gap-2 text-muted-foreground">
-              <Target className="h-8 w-8 opacity-30" />
-              <p className="text-sm">Chưa có lộ trình nào</p>
-              <Button size="sm" variant="outline" asChild>
-                <Link to="/lo-trinh">Tạo lộ trình</Link>
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {roadmaps.slice(0, 3).map((r) => (
-                <div key={r.id} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">{r.subject}</span>
-                    <span className="text-xs text-muted-foreground">{r.progress_pct}%</span>
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content: Progress & Roadmap */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Quick Progress Cards */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-none hover:border-blue-200 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-10 w-10 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
+                    <Zap className="h-5 w-5 fill-current" />
                   </div>
-                  <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary rounded-full transition-all"
-                      style={{ width: `${r.progress_pct}%` }}
-                    />
+                  <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
+                </div>
+                <h3 className="font-bold text-slate-900">Bắt đầu học ngay</h3>
+                <p className="text-sm text-slate-500 mt-1">Tiếp tục lộ trình của bạn để không bỏ lỡ kiến thức.</p>
+              </div>
+              <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-none hover:border-green-200 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-10 w-10 rounded-lg bg-green-50 text-green-500 flex items-center justify-center">
+                    <Map className="h-5 w-5" />
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-green-500 transition-colors" />
+                </div>
+                <h3 className="font-bold text-slate-900">Xem lộ trình</h3>
+                <p className="text-sm text-slate-500 mt-1">Khám phá các bước chân tiếp theo trong ngành lập trình.</p>
+              </div>
+            </div>
+
+            {/* Current Roadmap Progress Placeholder */}
+            <div className="bg-slate-50 border border-slate-100 p-8 rounded-3xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-blue-600" />
+                  Tiến độ lộ trình
+                </h2>
+                <Link to="/lo-trinh" className="text-sm font-bold text-blue-600 hover:underline">Xem tất cả</Link>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-bold text-slate-900">Lập trình cơ bản cho Newbie</span>
+                    <span className="text-sm font-bold text-slate-500">65%</span>
+                  </div>
+                  <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-600 rounded-full w-[65%]" />
                   </div>
                 </div>
-              ))}
+                <div className="flex items-center justify-center py-4">
+                  <p className="text-sm text-slate-400 italic">Mở rộng danh mục để xem các môn học khác</p>
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-
-        {/* Recent AI conversations */}
-        <div className="lg:col-span-2 bg-card border rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-sm">Hội thoại AI gần đây</h2>
-            <Button variant="ghost" size="sm" asChild className="text-xs h-7">
-              <Link to="/hoi-ai">Mở tất cả</Link>
-            </Button>
           </div>
-          {conversations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-6 text-center gap-2 text-muted-foreground">
-              <Bot className="h-8 w-8 opacity-30" />
-              <p className="text-sm">Chưa có cuộc trò chuyện nào</p>
-              <Button size="sm" variant="outline" asChild>
-                <Link to="/hoi-ai">Hỏi AI ngay</Link>
+
+          {/* Sidebar: Todo List */}
+          <div className="space-y-8">
+            <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <ListTodo className="h-5 w-5 text-blue-600" />
+                  Nhiệm vụ hôm nay
+                </h2>
+              </div>
+
+              {/* Add Todo input */}
+              <div className="relative mb-6">
+                <input
+                  type="text"
+                  placeholder="Thêm nhiệm vụ mới..."
+                  className="w-full bg-slate-50 border-none rounded-xl py-3 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={newTodo}
+                  onChange={(e) => setNewTodo(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addTodo()}
+                />
+                <button 
+                  onClick={addTodo}
+                  className="absolute right-2 top-1.5 h-9 w-9 bg-blue-600 rounded-lg flex items-center justify-center text-white hover:bg-blue-700 transition-colors"
+                >
+                  <Plus className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Todo list items */}
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                {pendingTodos.length === 0 && completedTodos.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-slate-400">Hôm nay bạn chưa có kế hoạch gì?</p>
+                  </div>
+                )}
+                
+                {pendingTodos.map(todo => (
+                  <div key={todo.id} className="flex items-start gap-3 group animate-in fade-in slide-in-from-left-2 duration-200">
+                    <button 
+                      onClick={() => toggleTodo(todo.id, false)}
+                      className="mt-0.5 text-slate-300 hover:text-blue-500 transition-colors"
+                    >
+                      <Circle className="h-5 w-5" />
+                    </button>
+                    <span className="text-sm font-medium text-slate-700 leading-tight">{todo.task}</span>
+                  </div>
+                ))}
+
+                {completedTodos.length > 0 && (
+                  <div className="pt-4 space-y-4">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Đã hoàn thành</p>
+                    {completedTodos.map(todo => (
+                      <div key={todo.id} className="flex items-start gap-3 opacity-50 grayscale transition-all">
+                        <button 
+                          onClick={() => toggleTodo(todo.id, true)}
+                          className="mt-0.5 text-blue-600"
+                        >
+                          <CheckCircle2 className="h-5 w-5" />
+                        </button>
+                        <span className="text-sm font-medium text-slate-700 line-through leading-tight">{todo.task}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Real-time Motivation Card */}
+            <div className="bg-blue-600 rounded-3xl p-6 text-white overflow-hidden relative group">
+              <Zap className="absolute -right-4 -bottom-4 h-32 w-32 text-blue-500/20 rotate-12 group-hover:rotate-45 transition-transform duration-700" />
+              <h3 className="text-lg font-bold mb-2 relative z-10">Mẹo nhỏ hôm nay</h3>
+              <p className="text-blue-100 text-sm leading-relaxed relative z-10">
+                Hãy dành ít nhất 15 phút mỗi ngày để luyện gõ code. Nó sẽ giúp ngón tay của bạn "nhớ" cú pháp nhanh hơn bất kỳ cuốn sách nào!
+              </p>
+              <Button size="sm" variant="secondary" className="mt-4 bg-white text-blue-600 border-none relative z-10 hover:bg-blue-50" asChild>
+                <Link to="/luyen-tap">Luyện tập ngay</Link>
               </Button>
             </div>
-          ) : (
-            <div className="divide-y">
-              {conversations.slice(0, 4).map((c) => (
-                <Link
-                  key={c.id}
-                  to="/hoi-ai"
-                  className="flex items-center gap-3 py-2.5 hover:text-primary transition-colors group"
-                >
-                  <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <Bot className="h-3.5 w-3.5 text-primary" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium truncate">{c.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(c.updated_at).toLocaleDateString("vi-VN")}
-                    </p>
-                  </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-                </Link>
-              ))}
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </AppLayout>

@@ -22,6 +22,7 @@ import CalendarPage from "./pages/Calendar";
 import FocusRoom from "./pages/FocusRoom";
 import SetupProfile from "./pages/SetupProfile";
 import CareerOrientation from "@/pages/CareerOrientation";
+import CodeAnalyzer from "./pages/CodeAnalyzer";
 // Khởi tạo React Query để quản lý bộ nhớ đệm (Cache) dữ liệu
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +74,8 @@ function AppRoutes() {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/lo-trinh" element={<ProtectedRoute><Roadmap /></ProtectedRoute>} />
       <Route path="/hoi-ai" element={<ProtectedRoute><AskAI /></ProtectedRoute>} />
+      <Route path="/phan-tich-code" element={<ProtectedRoute><CodeAnalyzer /></ProtectedRoute>} />
+      <Route path="/phan_tich_code" element={<Navigate to="/phan-tich-code" replace />} />
       <Route path="/luyen-de" element={<ProtectedRoute><Exams /></ProtectedRoute>} />
       <Route path="/lich" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
       <Route path="/phong-tap-trung" element={<ProtectedRoute><FocusRoom /></ProtectedRoute>} />

@@ -7,15 +7,18 @@ import { supabase } from "@/lib/supabase";
 /**
  * Profile: Chứa thông tin chi tiết của học sinh lưu trong Database.
  */
+export type EduRole = "admin" | "operator" | "user";
+
+/**
+ * Profile: Chứa thông tin chi tiết của học sinh lưu trong Database EduAI.
+ */
 export interface Profile {
   id: string;
-  full_name: string;
-  grade: number | null; // Lớp học (6-12)
+  full_name: string | null;
   avatar_url: string | null;
-  plan: "free" | "pro" | "premium"; // Gói tài khoản
-  role: "user" | "staff" | "admin"; // Quyền hạn: người dùng, nhân viên, quản trị viên
-  streak_days: number; // Số ngày học liên tiếp
-  total_study_minutes: number; // Tổng thời gian học
+  role: EduRole;
+  streak_count: number;
+  last_activity: string;
   created_at: string;
   updated_at: string;
 }
@@ -26,7 +29,7 @@ export interface Profile {
 interface AuthContextValue {
   user: User | null; // Thông tin tài khoản từ Supabase Auth
   session: Session | null; // Phiên đăng nhập hiện tại
-  profile: Profile | null; // Thông tin chi tiết (tên, lớp, điểm...)
+  profile: Profile | null; // Thông tin chi tiết EduAI
   loading: boolean; // Trạng thái đang tải dữ liệu
   signOut: () => Promise<void>; // Hàm đăng xuất
   refreshProfile: () => Promise<void>; // Hàm tải lại thông tin cá nhân
@@ -53,10 +56,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Hàm lấy thông tin chi tiết từ bảng 'profiles' dựa trên ID người dùng
+  // Hàm lấy thông tin chi tiết từ bảng 'edu_profiles' dựa trên ID người dùng
   const fetchProfile = async (userId: string) => {
     const { data, error } = await supabase
-      .from("profiles")
+      .from("edu_profiles")
       .select("*")
       .eq("id", userId)
       .single();

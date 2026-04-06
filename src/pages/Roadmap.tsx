@@ -1,252 +1,299 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/AppLayout";
-import { useRoadmaps, type RoadmapTopic } from "@/hooks/useRoadmap";
-import { useExams } from "@/hooks/useExams";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
-} from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
-import { Plus, Trash2, CheckCircle2, Circle, ChevronDown, ChevronUp, Map } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { 
+  Compass, Code, Database, Layout, ArrowRight, 
+  PlayCircle, BookOpen, CheckCircle2, Circle, 
+  ChevronRight, ArrowLeft
+} from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 
-const SUBJECTS = ["Toán", "Ngữ văn", "Tiếng Anh", "Vật lý", "Hóa học", "Sinh học", "Lịch sử", "Địa lý", "GDCD", "Tin học", "Khoa học"];
+interface RoadmapStep {
+  id: string;
+  title: string;
+  description: string;
+  theory_markdown: string;
+  video_url: string;
+  order_index: number;
+  completed?: boolean;
+}
 
-const subjectColors: Record<string, string> = {
-  "Toán": "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
-  "Ngữ văn": "bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300",
-  "Tiếng Anh": "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300",
-  "Vật lý": "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300",
-  "Hóa học": "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300",
-  "Sinh học": "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-  "Lịch sử": "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
-  "Địa lý": "bg-lime-100 text-lime-700 dark:bg-lime-950 dark:text-lime-300",
-  "GDCD": "bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300",
-  "Tin học": "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300",
-  "Khoa học": "bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300",
-};
-
-function getSubjectColor(subject: string) {
-  return subjectColors[subject] ?? "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+interface Roadmap {
+  id: string;
+  title: string;
+  description: string;
+  role_type: string;
 }
 
 export default function Roadmap() {
   const { profile } = useAuth();
-  const { data: roadmaps = [], createRoadmap, toggleTopic, deleteRoadmap } = useRoadmaps();
-  const { toast } = useToast();
-  const [open, setOpen] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
+  const [steps, setSteps] = useState<RoadmapStep[]>([]);
+  const [currentStep, setCurrentStep] = useState<RoadmapStep | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Form state
-  const [subject, setSubject] = useState("");
-  const [goal, setGoal] = useState("");
-  const [totalWeeks, setTotalWeeks] = useState("4");
-  const [creating, setCreating] = useState(false);
+  const roles = [
+    { id: "basics", title: "Lập trình là gì?", desc: "Dành cho người mới bắt đầu từ con số 0.", icon: Compass, color: "bg-blue-50 text-blue-600" },
+    { id: "frontend", title: "Frontend Developer", desc: "Xây dựng giao diện web đẹp mắt với HTML/CSS/JS.", icon: Layout, color: "bg-purple-50 text-purple-600" },
+    { id: "backend", title: "Backend Developer", desc: "Xử lý logic, database và server-side.", icon: Code, color: "bg-green-50 text-green-600" },
+    { id: "data", title: "Data Analyst", desc: "Phân tích dữ liệu và tìm kiếm thông tin hữu ích.", icon: Database, color: "bg-orange-50 text-orange-600" },
+  ];
 
-  const handleCreate = async () => {
-    if (!subject) {
-      toast({ title: "Vui lòng chọn môn học", variant: "destructive" });
-      return;
+  useEffect(() => {
+    fetchRoadmaps();
+  }, []);
+
+  async function fetchRoadmaps() {
+    const { data, error } = await supabase.from('edu_roadmaps').select('*');
+    if (error) console.error(error);
+    else setRoadmaps(data || []);
+    setLoading(false);
+  }
+
+  async function handleRoleSelect(roleType: string) {
+    setLoading(true);
+    setSelectedRole(roleType);
+    
+    // Find roadmap for this role
+    const roadmap = roadmaps.find(r => r.role_type === roleType);
+    if (roadmap) {
+      const { data, error } = await supabase
+        .from('edu_roadmap_steps')
+        .select('*')
+        .eq('roadmap_id', roadmap.id)
+        .order('order_index', { ascending: true });
+      
+      if (error) {
+        toast.error("Không thể tải lộ trình");
+      } else {
+        // Fetch user progress
+        const { data: progress } = await supabase
+          .from('edu_user_progress')
+          .select('step_id')
+          .eq('user_id', profile?.id)
+          .eq('completed', true);
+        
+        const completedStepIds = new Set(progress?.map(p => p.step_id) || []);
+        const stepsWithProgress = data.map(s => ({
+          ...s,
+          completed: completedStepIds.has(s.id)
+        }));
+        
+        setSteps(stepsWithProgress);
+        if (stepsWithProgress.length > 0) setCurrentStep(stepsWithProgress[0]);
+      }
+    } else {
+      toast.info("Lộ trình này đang được cập nhật!");
+      setSelectedRole(null);
     }
-    setCreating(true);
-    try {
-      await createRoadmap.mutateAsync({ subject, goal, total_weeks: parseInt(totalWeeks) });
-      toast({ title: "Tạo lộ trình thành công! 🎯" });
-      setOpen(false);
-      setSubject(""); setGoal(""); setTotalWeeks("4");
-    } catch {
-      toast({ title: "Lỗi khi tạo lộ trình", variant: "destructive" });
-    } finally {
-      setCreating(false);
+    setLoading(false);
+  }
+
+  async function toggleComplete(stepId: string) {
+    if (!profile?.id) return;
+
+    const step = steps.find(s => s.id === stepId);
+    if (!step) return;
+
+    const isCompleted = !step.completed;
+
+    const { error } = await supabase
+      .from('edu_user_progress')
+      .upsert({ 
+        user_id: profile.id, 
+        step_id: stepId, 
+        completed: isCompleted,
+        completed_at: new Date().toISOString()
+      }, { onConflict: 'user_id,step_id' });
+
+    if (error) {
+      toast.error("Lỗi cập nhật tiến độ");
+    } else {
+      setSteps(steps.map(s => s.id === stepId ? { ...s, completed: isCompleted } : s));
+      toast.success(isCompleted ? "Đã hoàn thành bước này! 🎉" : "Đã hủy hoàn thành");
     }
-  };
+  }
 
-  const handleToggle = async (topicId: string, current: boolean) => {
-    await toggleTopic.mutateAsync({ topicId, is_completed: !current });
-  };
+  if (loading) return <AppLayout><div className="flex items-center justify-center h-64">Đang tải...</div></AppLayout>;
 
-  const handleDelete = async (id: string) => {
-    await deleteRoadmap.mutateAsync(id);
-    toast({ title: "Đã xoá lộ trình" });
-  };
+  // --- View: Role Selection ---
+  if (!selectedRole) {
+    return (
+      <AppLayout>
+        <div className="max-w-5xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Chọn vai trò của bạn</h1>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
+              Hãy chọn điểm bắt đầu phù hợp với mục tiêu của bạn. Đừng lo lắng, bạn có thể thay đổi bất cứ lúc nào.
+            </p>
+          </div>
 
+          <div className="grid md:grid-cols-2 gap-6">
+            {roles.map(role => (
+              <div 
+                key={role.id}
+                onClick={() => handleRoleSelect(role.id)}
+                className="group p-8 rounded-3xl border border-slate-100 bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all cursor-pointer relative overflow-hidden"
+              >
+                <div className="relative z-10 space-y-6">
+                  <div className={`h-14 w-14 rounded-2xl ${role.color} flex items-center justify-center transition-transform group-hover:scale-110`}>
+                    <role.icon className="h-7 w-7" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-bold text-slate-900">{role.title}</h3>
+                    <p className="text-slate-500 leading-relaxed">{role.desc}</p>
+                  </div>
+                  <div className="flex items-center text-blue-600 font-bold gap-2 group-hover:gap-4 transition-all">
+                    Xem lộ trình <ArrowRight className="h-5 w-5" />
+                  </div>
+                </div>
+                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <role.icon className="h-32 w-32 -mr-8 -mt-8 rotate-12" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  function getYouTubeId(url: string) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : url;
+  }
+
+  // --- View: Learning Steps ---
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold">Lộ trình học tập</h1>
-            <p className="text-muted-foreground mt-1">Quản lý kế hoạch học tập theo từng môn</p>
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
+        {/* Sidebar: Navigation List */}
+        <div className="lg:w-80 space-y-6">
+          <Button 
+            variant="ghost" 
+            className="text-slate-500 font-bold hover:bg-slate-50 -ml-2"
+            onClick={() => setSelectedRole(null)}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" /> Quay lại
+          </Button>
+
+          <div className="bg-white border border-slate-100 rounded-3xl p-4 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-900 px-4 py-2 border-b border-slate-50 mb-4">Danh sách bài học</h2>
+            <div className="space-y-2">
+              {steps.map((step, index) => (
+                <button
+                  key={step.id}
+                  onClick={() => setCurrentStep(step)}
+                  className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all text-left ${
+                    currentStep?.id === step.id 
+                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20" 
+                    : "hover:bg-slate-50 text-slate-600"
+                  }`}
+                >
+                  <div className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
+                    currentStep?.id === step.id ? "bg-white/20" : "bg-slate-100 text-slate-500"
+                  }`}>
+                    {index + 1}
+                  </div>
+                  <span className="flex-1 text-sm font-bold truncate">{step.title}</span>
+                  {step.completed && (
+                    <CheckCircle2 className={`h-4 w-4 ${currentStep?.id === step.id ? "text-white" : "text-green-500"}`} />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Tạo lộ trình
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Tạo lộ trình mới</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <Label>Môn học</Label>
-                  <Select value={subject} onValueChange={setSubject}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Chọn môn học" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SUBJECTS.map((s) => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>Mục tiêu</Label>
-                  <Textarea
-                    placeholder="Ví dụ: Nắm vững kiến thức đại số lớp 10, ôn thi THPT..."
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
-                    rows={3}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Số tuần</Label>
-                  <Select value={totalWeeks} onValueChange={setTotalWeeks}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[2, 4, 6, 8, 12].map((n) => (
-                        <SelectItem key={n} value={String(n)}>{n} tuần</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={handleCreate} disabled={creating} className="w-full">
-                  {creating ? "Đang tạo..." : "Tạo lộ trình"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
         </div>
 
-        {/* Empty state */}
-        {roadmaps.length === 0 && (
-          <div className="bg-card border rounded-xl p-16 text-center">
-            <Map className="h-12 w-12 mx-auto mb-4 text-muted-foreground/30" />
-            <p className="text-muted-foreground mb-4">Bạn chưa có lộ trình nào</p>
-            <Button onClick={() => setOpen(true)} variant="outline">
-              <Plus className="h-4 w-4 mr-2" /> Tạo lộ trình đầu tiên
-            </Button>
-          </div>
-        )}
-
-        {/* Roadmap cards */}
-        <div className="space-y-4">
-          {roadmaps.map((r) => {
-            const topics = (r.topics ?? []).sort((a, b) => a.order_index - b.order_index);
-            const completed = topics.filter((t) => t.is_completed).length;
-            const pct = topics.length > 0 ? Math.round((completed / topics.length) * 100) : 0;
-            const isExpanded = expandedId === r.id;
-
-            return (
-              <div key={r.id} className="bg-card border rounded-xl overflow-hidden">
-                {/* Card header */}
-                <div className="p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <span className={cn("text-xs font-semibold px-2.5 py-1 rounded-full", getSubjectColor(r.subject))}>
-                        {r.subject}
-                      </span>
-                      <span className="text-xs text-muted-foreground">{r.total_weeks} tuần</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                        onClick={() => handleDelete(r.id)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => setExpandedId(isExpanded ? null : r.id)}
-                      >
-                        {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                      </Button>
-                    </div>
+        {/* Main Content Area */}
+        <div className="flex-1 space-y-8">
+          {currentStep ? (
+            <div className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm">
+              {/* Header */}
+              <div className="p-8 border-b border-slate-50">
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider">
+                    Bước {currentStep.order_index}
                   </div>
+                  <Button 
+                    variant={currentStep.completed ? "outline" : "default"}
+                    className={currentStep.completed ? "border-green-100 text-green-600 hover:bg-green-50" : "bg-blue-600 hover:bg-blue-700"}
+                    onClick={() => toggleComplete(currentStep.id)}
+                  >
+                    {currentStep.completed ? (
+                      <><CheckCircle2 className="h-4 w-4 mr-2" /> Đã hoàn thành</>
+                    ) : (
+                      "Đánh dấu hoàn thành"
+                    )}
+                  </Button>
+                </div>
+                <h2 className="text-3xl font-extrabold text-slate-900">{currentStep.title}</h2>
+                <p className="text-slate-500 mt-2 text-lg leading-relaxed">{currentStep.description}</p>
+              </div>
 
-                  {r.goal && (
-                    <p className="text-sm text-muted-foreground mt-2">{r.goal}</p>
-                  )}
+              {/* Video Section (Placeholder if no URL) */}
+              {currentStep.video_url && (
+                <div className="aspect-video bg-slate-900 relative group">
+                  <iframe
+                    className="w-full h-full"
+                    src={`https://www.youtube.com/embed/${getYouTubeId(currentStep.video_url)}`}
+                    title={currentStep.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              )}
 
-                  {/* Progress bar */}
-                  <div className="mt-4 space-y-1.5">
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>{completed}/{topics.length} chủ đề hoàn thành</span>
-                      <span className="font-medium text-foreground">{pct}%</span>
-                    </div>
-                    <div className="h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all duration-500"
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
+              {/* Theory Content */}
+              <div className="p-8 space-y-8">
+                <div className="prose prose-slate max-w-none prose-headings:font-bold prose-h3:text-blue-600">
+                  <h3 className="flex items-center gap-2 mb-6">
+                    <BookOpen className="h-5 w-5" /> Lý thuyết & Tip
+                  </h3>
+                  <div className="text-slate-600 leading-loose">
+                    <ReactMarkdown>{currentStep.theory_markdown || "Nội dung đang được biên soạn..."}</ReactMarkdown>
                   </div>
                 </div>
 
-                {/* Topics list */}
-                {isExpanded && (
-                  <div className="border-t px-5 pb-4 pt-3 space-y-2">
-                    {Array.from({ length: r.total_weeks }, (_, i) => i + 1).map((week) => {
-                      const weekTopics = topics.filter((t) => t.week === week);
-                      return (
-                        <div key={week}>
-                          <p className="text-xs font-semibold text-muted-foreground mb-1.5">Tuần {week}</p>
-                          {weekTopics.map((topic) => (
-                            <button
-                              key={topic.id}
-                              onClick={() => handleToggle(topic.id, topic.is_completed)}
-                              className="w-full flex items-start gap-3 rounded-lg p-2.5 hover:bg-muted transition-colors text-left group"
-                            >
-                              {topic.is_completed ? (
-                                <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                              ) : (
-                                <Circle className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0 group-hover:text-primary transition-colors" />
-                              )}
-                              <div>
-                                <p className={cn("text-sm font-medium", topic.is_completed && "line-through text-muted-foreground")}>
-                                  {topic.title}
-                                </p>
-                                {topic.description && (
-                                  <p className="text-xs text-muted-foreground">{topic.description}</p>
-                                )}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                {/* Footer Navigation */}
+                <div className="pt-8 border-t border-slate-50 flex items-center justify-between">
+                  <Button 
+                    variant="ghost" 
+                    className="text-slate-500 font-bold"
+                    onClick={() => {
+                      const prev = steps[steps.indexOf(currentStep) - 1];
+                      if (prev) setCurrentStep(prev);
+                    }}
+                    disabled={steps.indexOf(currentStep) === 0}
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" /> Bài trước
+                  </Button>
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700 font-bold"
+                    onClick={() => {
+                      const next = steps[steps.indexOf(currentStep) + 1];
+                      if (next) setCurrentStep(next);
+                      if (!currentStep.completed) toggleComplete(currentStep.id);
+                    }}
+                    disabled={steps.indexOf(currentStep) === steps.length - 1}
+                  >
+                    Bài tiếp theo <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </div>
-            );
-          })}
+            </div>
+          ) : (
+            <div className="h-full flex flex-col items-center justify-center text-slate-400 py-32 space-y-4">
+              <BookOpen className="h-16 w-16 opacity-20" />
+              <p className="font-medium">Vui lòng chọn một bài học từ danh sách bên trái.</p>
+            </div>
+          )}
         </div>
       </div>
     </AppLayout>

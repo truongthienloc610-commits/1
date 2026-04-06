@@ -11,10 +11,12 @@ export function ProtectedRoute({ children }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Đang tải...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent shadow-lg shadow-blue-500/20" />
+          <div className="text-sm font-black text-slate-400 uppercase tracking-widest italic animate-pulse">
+            EduAI is loading...
+          </div>
         </div>
       </div>
     );
@@ -24,9 +26,9 @@ export function ProtectedRoute({ children }: Props) {
     return <Navigate to="/dang-nhap" state={{ from: location }} replace />;
   }
 
-  // Nếu người dùng đã đăng nhập nhưng chưa hoàn thiện profile (thiếu tên hoặc lớp)
+  // Nếu người dùng đã đăng nhập nhưng chưa hoàn thiện profile (thiếu tên)
   // và họ KHÔNG đang ở trang thiết lập hồ sơ, thì bắt buộc phải chuyển hướng qua đó.
-  const isProfileIncomplete = !profile?.full_name || !profile?.grade;
+  const isProfileIncomplete = !profile?.full_name;
   const isAtSetupPage = location.pathname === "/thiet-lap-ho-so";
 
   if (isProfileIncomplete && !isAtSetupPage) {

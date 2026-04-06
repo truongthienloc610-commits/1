@@ -3,137 +3,166 @@ import { Button } from "@/components/ui/button";
 import { PublicNavbar } from "@/components/PublicNavbar";
 import { PublicFooter } from "@/components/PublicFooter";
 import {
-  Target, FileText, Bot, BookOpen, Heart, Compass,
-  CheckCircle2, Star, ArrowRight,
+  Compass, Code, BookOpen, Target, ArrowRight,
+  Terminal, GitBranch, Github, Layers, Zap
 } from "lucide-react";
 
 const features = [
-  { icon: Target, title: "Lộ trình AI", desc: "AI tạo kế hoạch học tập riêng, phù hợp trình độ và mục tiêu của bạn." },
-  { icon: FileText, title: "Luyện đề thông minh", desc: "Tạo đề tuỳ chỉnh, AI chấm bài và phân tích điểm yếu chi tiết." },
-  { icon: Bot, title: "Trợ lý AI 24/7", desc: "Hỏi bài bất kỳ lúc nào, AI giải thích từng bước dễ hiểu." },
-  { icon: BookOpen, title: "Tóm tắt tài liệu", desc: "Upload PDF, AI tóm tắt, tạo flashcard và câu hỏi tự động." },
-  { icon: Heart, title: "Sức khoẻ tinh thần", desc: "Theo dõi thời gian học, nhắc nghỉ ngơi, giữ cân bằng." },
-  { icon: Compass, title: "Hướng nghiệp", desc: "Trắc nghiệm MBTI, gợi ý nghề nghiệp và kỹ năng cần phát triển." },
-];
-
-const testimonials = [
-  { name: "Minh Anh", grade: "Lớp 10", quote: "Mình học Toán tiến bộ rõ rệt nhờ AI phân tích lỗi sai!" },
-  { name: "Đức Huy", grade: "Lớp 12", quote: "Luyện đề ôn thi THPT cực tiện, đỡ phải tìm đề khắp nơi." },
-  { name: "Thu Hà", grade: "Lớp 8", quote: "Trợ lý AI giải thích dễ hiểu hơn sách giáo khoa nhiều!" },
+  { 
+    icon: Compass, 
+    title: "Định hướng rõ ràng", 
+    desc: "Không còn học lan man. Chúng mình giúp bạn tập trung vào những nền tảng cốt lõi nhất để bắt đầu sự nghiệp." 
+  },
+  { 
+    icon: Code, 
+    title: "Thực hành ngay lập tức", 
+    desc: "Học đi đôi với hành. Các bài tập code được thiết kế để bạn làm quen với cú pháp và tư duy lập trình." 
+  },
+  { 
+    icon: Github, 
+    title: "Hướng tới thực tế", 
+    desc: "Sau khi nắm vững cơ bản, chúng mình khuyến khích bạn bước ra thế giới thực: Git, GitHub và LeetCode." 
+  },
 ];
 
 export default function Landing() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white">
       <PublicNavbar />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-        <div className="container relative py-16 md:py-24 flex flex-col items-center text-center gap-6">
-          <div className="inline-flex items-center gap-2 rounded-full border bg-card px-4 py-1.5 text-body-sm font-medium shadow-sm">
-            <Star className="h-4 w-4 text-accent" />
-            10,000+ học sinh đang dùng
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-16 md:pt-32 md:pb-24 border-b border-slate-100">
+        <div className="container relative flex flex-col items-center text-center gap-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50/50 px-4 py-1.5 text-sm font-medium text-slate-600">
+            <Zap className="h-4 w-4 text-blue-500 fill-blue-500" />
+            Học lập trình không còn khó khăn
           </div>
 
-          <h1 className="max-w-2xl">
-            Học thông minh hơn với{" "}
-            <span className="text-gradient-primary">AI</span>
-            {" "}– Dành riêng cho bạn
+          <h1 className="max-w-4xl text-slate-900 text-4xl md:text-6xl font-extrabold tracking-tight">
+            Chấm dứt việc học <span className="text-blue-600">lan man</span>. <br />
+            Xây dựng nền tảng vững chắc.
           </h1>
 
-          <p className="text-body text-muted-foreground max-w-lg">
-            Lộ trình cá nhân hoá, luyện đề thông minh, trợ lý AI 24/7. Tất cả trong một nền tảng dành cho học sinh lớp 6–12.
+          <p className="text-lg md:text-xl text-slate-500 max-w-2xl leading-relaxed">
+            EduAI không giúp bạn trở thành 'siêu nhân' ngay lập tức. Chúng mình giúp bạn hiểu bản chất, vững cơ bản và biết chính xác mình cần làm gì tiếp theo.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <Button variant="hero" size="xl" asChild>
+          <div className="flex flex-col sm:flex-row gap-4 mt-4">
+            <Button size="lg" className="h-12 px-8 text-base bg-blue-600 hover:bg-blue-700 shadow-none border-none" asChild>
               <Link to="/dang-ky">
-                Bắt đầu học ngay
-                <ArrowRight className="h-4 w-4 ml-1" />
+                Bắt đầu lộ trình của bạn
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="h-12 px-8 text-base border-slate-200 hover:bg-slate-50 shadow-none" asChild>
+              <Link to="/#features">
+                Tìm hiểu thêm
               </Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="py-16 md:py-20 bg-muted/30">
-        <div className="container space-y-10">
-          <div className="text-center space-y-3">
-            <h2>Tính năng nổi bật</h2>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Mọi thứ bạn cần để học tập hiệu quả hơn mỗi ngày.
-            </p>
+      {/* Vision & Pain Points */}
+      <section id="features" className="py-20 bg-white">
+        <div className="container space-y-16">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                <Target className="h-6 w-6" />
+              </div>
+              <h2 className="text-3xl font-bold text-slate-900 leading-tight">
+                Giải quyết nỗi đau mang tên "không biết bắt đầu từ đâu"
+              </h2>
+              <p className="text-lg text-slate-500 leading-relaxed">
+                Thế giới lập trình quá rộng lớn. Newbie thường bị ngợp bởi hàng nghìn công nghệ. EduAI lọc bỏ những thứ rườm rà, chỉ giữ lại những gì thực sự quan trọng để bạn bớt "loạn".
+              </p>
+              <ul className="space-y-4">
+                {[
+                  "Lộ trình tinh gọn cho Frontend, Backend, Data",
+                  "Lý thuyết cặn kẽ kèm video thực tế",
+                  "Cộng cụ phân tích lỗi sai bằng AI"
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-slate-600 font-medium">
+                    <div className="h-5 w-5 rounded-full bg-green-50 flex items-center justify-center">
+                      <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                    </div>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100 aspect-square flex items-center justify-center">
+              <div className="w-full space-y-4">
+                <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm animate-pulse-slow">
+                  <div className="h-3 w-32 bg-slate-100 rounded mb-2" />
+                  <div className="h-4 w-full bg-slate-50 rounded" />
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm ml-8">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-bold">AI</div>
+                    <div className="h-3 w-40 bg-slate-100 rounded" />
+                  </div>
+                  <div className="h-2 w-full bg-slate-50 rounded mb-2" />
+                  <div className="h-2 w-3/4 bg-slate-50 rounded" />
+                </div>
+                <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm animate-pulse-slow delay-150">
+                  <div className="h-3 w-28 bg-slate-100 rounded mb-2" />
+                  <div className="h-4 w-full bg-slate-50 rounded" />
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Features Grid */}
+      <section className="py-20 border-t border-slate-100">
+        <div className="container">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((f) => (
-              <div
-                key={f.title}
-                className="group bg-card rounded-lg p-6 shadow-sm border border-border/50 hover:shadow-md hover:-translate-y-0.5 transition-all"
-              >
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <f.icon className="h-5 w-5 text-primary" />
+              <div key={f.title} className="p-8 rounded-2xl border border-slate-100 bg-white hover:border-blue-100 hover:bg-blue-50/20 transition-all">
+                <div className="h-12 w-12 rounded-xl bg-slate-50 text-slate-600 flex items-center justify-center mb-6">
+                  <f.icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-base font-semibold mb-2">{f.title}</h3>
-                <p className="text-body-sm text-muted-foreground">{f.desc}</p>
+                <h3 className="text-xl font-bold text-slate-900 mb-3">{f.title}</h3>
+                <p className="text-slate-500 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="py-16 md:py-20">
-        <div className="container space-y-10">
-          <div className="text-center space-y-3">
-            <h2>Học sinh nói gì?</h2>
-            <p className="text-muted-foreground">Những chia sẻ từ bạn bè đang dùng HọcAI.</p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {testimonials.map((t) => (
-              <div key={t.name} className="bg-card rounded-lg p-6 shadow-sm border border-border/50">
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="text-body-sm mb-4 italic">"{t.quote}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-body-sm">
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <p className="text-body-sm font-semibold">{t.name}</p>
-                    <p className="text-caption text-muted-foreground">{t.grade}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Banner */}
-      <section className="py-16 md:py-20 bg-primary/5">
-        <div className="container text-center space-y-5">
-          <h2>Sẵn sàng học thông minh hơn?</h2>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            Đăng ký miễn phí và bắt đầu lộ trình học tập cá nhân hoá ngay hôm nay.
+      {/* Transition Focus */}
+      <section className="py-24 bg-slate-900 text-white overflow-hidden relative">
+        <div className="container relative z-10 flex flex-col items-center text-center gap-8">
+          <h2 className="text-white text-3xl md:text-5xl font-bold tracking-tight">
+            Chúng mình là bước đệm đầu tiên.
+          </h2>
+          <p className="text-slate-400 text-lg md:text-xl max-w-2xl">
+            Sau khi hoàn thành lộ trình tại EduAI, bạn sẽ sẵn sàng để chinh phục <strong>LeetCode</strong>, đọc source code trên <strong>GitHub</strong> và tự tin bắt đầu các dự án cá nhân.
           </p>
-          <Button variant="hero" size="xl" asChild>
+          <div className="flex flex-wrap justify-center gap-8 pt-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+            <div className="flex items-center gap-2 font-bold text-xl"><Github className="h-6 w-6" /> GitHub</div>
+            <div className="flex items-center gap-2 font-bold text-xl"><Terminal className="h-6 w-6" /> LeetCode</div>
+            <div className="flex items-center gap-2 font-bold text-xl"><GitBranch className="h-6 w-6" /> Git Flow</div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-white">
+        <div className="container text-center space-y-8">
+          <h2 className="text-4xl font-bold text-slate-900">Bắt đầu hành trình của bạn ngay.</h2>
+          <p className="text-lg text-slate-500 max-w-lg mx-auto">
+            Gia nhập cộng đồng lập trình viên tự học, có định hướng và không bao giờ bỏ cuộc.
+          </p>
+          <Button size="lg" className="h-14 px-10 text-lg bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20 border-none transition-transform hover:scale-105 active:scale-95" asChild>
             <Link to="/dang-ky">
-              Đăng ký ngay
-              <ArrowRight className="h-4 w-4 ml-1" />
+              Tạo tài khoản miễn phí
+              <ArrowRight className="h-5 w-5 ml-2" />
             </Link>
           </Button>
-          <div className="flex items-center justify-center gap-4 text-body-sm text-muted-foreground">
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Toàn diện</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Cá nhân hoá</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="h-4 w-4 text-success" /> Trợ lý AI</span>
-          </div>
         </div>
       </section>
 

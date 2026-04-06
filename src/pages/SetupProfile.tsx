@@ -3,31 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Sparkles, UserCircle, GraduationCap, CheckCircle2 } from "lucide-react";
+import { Sparkles, UserCircle, CheckCircle2, Code2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
-import { AuthIllustration } from "@/components/AuthIllustration";
-import "@/styles/auth.css";
 
 export default function SetupProfile() {
   const { user, profile, refreshProfile } = useAuth();
   const [name, setName] = useState("");
-  const [grade, setGrade] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Nếu profile đã có dữ liệu rồi mà lỡ vào đây, đẩy ra dashboard
-    if (profile?.full_name && profile?.grade) {
+    if (profile?.full_name) {
       navigate("/dashboard");
     }
     // Gợi ý tên từ Google nếu có
@@ -38,114 +28,85 @@ export default function SetupProfile() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !grade) {
-      toast({ title: "Vui lòng hoàn thành mọi thông tin", variant: "destructive" });
+    if (!name.trim()) {
+      toast({ title: "Vui lòng nhập tên của bạn", variant: "destructive" });
       return;
     }
-
     setLoading(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({
-        full_name: name,
-        grade: parseInt(grade),
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", user?.id);
+    try {
+      const { error } = await supabase
+        .from("edu_profiles")
+        .upsert({
+          id: user?.id,
+          full_name: name,
+          last_activity: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
 
-    if (error) {
-      toast({ title: "Có lỗi xảy ra", description: error.message, variant: "destructive" });
-      setLoading(false);
-    } else {
+      if (error) throw error;
+      
       await refreshProfile();
       toast({
         title: "Thiết lập thành công! 🎉",
-        description: "Chào mừng bạn đến với HọcAI.",
+        description: "Chào mừng bạn đến với EduAI.",
       });
       navigate("/dashboard");
+    } catch (error: any) {
+      toast({ title: "Có lỗi xảy ra", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="auth-container">
-      {/* 1. Phần FORM bên trái */}
-      <div className="auth-form-side">
-        <div className="auth-form-wrapper space-y-8 animate-fade-in-up">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 font-bold text-2xl text-primary mb-2">
-              <Sparkles className="h-8 w-8" />
-              HọcAI
+    <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="max-w-md w-full space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="space-y-4 text-center">
+          <div className="inline-flex items-center gap-2 font-black text-3xl tracking-tighter text-slate-900">
+            <div className="bg-blue-600 p-1.5 rounded-xl text-white">
+              <Code2 className="h-8 w-8" />
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight">Chào mừng người bạn mới! 👋</h1>
-            <p className="text-lg text-muted-foreground">
-              Để trợ lý AI có thể hỗ trợ bạn tốt nhất, chúng mình cần thêm một chút thông tin nhé.
-            </p>
+            <span>Edu<span className="text-blue-600">AI</span></span>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name" className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <UserCircle className="h-4 w-4" />
-                  BẠN TÊN LÀ GÌ?
-                </Label>
-                <Input
-                  id="name"
-                  placeholder="Họ và tên của bạn"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="auth-input h-14 text-xl font-medium"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <GraduationCap className="h-4 w-4" />
-                  BẠN ĐANG HỌC LỚP MẤY?
-                </Label>
-                <Select value={grade} onValueChange={setGrade}>
-                  <SelectTrigger className="auth-input h-14 text-xl font-medium border-b-2">
-                    <SelectValue placeholder="Chọn lớp của bạn" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[6, 7, 8, 9, 10, 11, 12].map((g) => (
-                      <SelectItem key={g} value={String(g)} className="text-lg py-3">
-                        Lớp {g}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Lộ trình học tập sẽ được tinh chỉnh dựa trên khối lớp này.
-                </p>
-              </div>
-            </div>
-
-            <Button 
-              type="submit" 
-              size="lg" 
-              className="w-full h-14 rounded-full text-xl font-bold shadow-xl shadow-primary/30 mt-4 transition-all hover:scale-[1.02] active:scale-[0.98]" 
-              disabled={loading}
-            >
-              {loading ? (
-                "Đang hoàn tất..."
-              ) : (
-                <span className="flex items-center gap-2">
-                  Sẵn sàng tham gia <CheckCircle2 className="h-5 w-5" />
-                </span>
-              )}
-            </Button>
-          </form>
-
-          <p className="text-center text-sm text-muted-foreground">
-            Thông tin này có thể được thay đổi sau trong cài đặt Hồ sơ.
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Bắt đầu hành trình! 👋</h1>
+          <p className="text-slate-500 font-medium">
+            Để EduAI đồng hành cùng bạn tốt nhất, chúng mình hãy làm quen một chút nhé.
           </p>
         </div>
-      </div>
 
-      {/* 2. Phần MINH HỌA bên phải */}
-      <div className="auth-illustration-side">
-        <AuthIllustration />
+        <form onSubmit={handleSubmit} className="space-y-8 bg-slate-50/50 p-10 rounded-[2.5rem] border border-slate-100">
+          <div className="space-y-3">
+            <Label htmlFor="name" className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest pl-1">
+              <UserCircle className="h-4 w-4" />
+              Tên hiển thị của bạn
+            </Label>
+            <Input
+              id="name"
+              placeholder="Ví dụ: Nguyễn Văn A"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-16 px-6 rounded-2xl bg-white border-slate-200 text-xl font-bold text-slate-900 focus:ring-4 focus:ring-blue-100 outline-none transition-all"
+            />
+          </div>
+
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="w-full h-16 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xl font-black shadow-xl shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            {loading ? (
+              <div className="h-6 w-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : (
+              <span className="flex items-center gap-3">
+                Vào Dashboard <CheckCircle2 className="h-6 w-6" />
+              </span>
+            )}
+          </Button>
+        </form>
+
+        <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest italic">
+          * Đừng lo, bạn có thể đổi tên bất cứ lúc nào trong cài đặt hồ sơ.
+        </p>
       </div>
     </div>
   );
