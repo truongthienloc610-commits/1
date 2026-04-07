@@ -110,7 +110,7 @@ export default function Dashboard() {
                   <div className="h-10 w-10 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
                     <Zap className="h-5 w-5 fill-current" />
                   </div>
-                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary/80 transition-colors" />
                 </div>
                 <h3 className="font-bold text-foreground">Bắt đầu học ngay</h3>
                 <p className="text-sm text-muted-foreground mt-1">Tiếp tục lộ trình của bạn để không bỏ lỡ kiến thức.</p>
@@ -131,10 +131,10 @@ export default function Dashboard() {
             <div className="bg-muted/30 border border-border p-8 rounded-3xl">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-blue-600" />
+                  <BookOpen className="h-5 w-5 text-primary" />
                   Tiến độ lộ trình
                 </h2>
-                <Link to="/lo-trinh" className="text-sm font-bold text-blue-600 hover:underline">Xem tất cả</Link>
+                <Link to="/lo-trinh" className="text-sm font-bold text-primary hover:underline">Xem tất cả</Link>
               </div>
               
               <div className="space-y-6">
@@ -144,7 +144,7 @@ export default function Dashboard() {
                     <span className="text-sm font-bold text-muted-foreground">65%</span>
                   </div>
                   <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-600 rounded-full w-[65%]" />
+                    <div className="h-full bg-primary rounded-full w-[65%]" />
                   </div>
                 </div>
                 <div className="flex items-center justify-center py-4">
@@ -159,7 +159,7 @@ export default function Dashboard() {
             <div className="bg-card border border-border rounded-3xl p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
-                  <ListTodo className="h-5 w-5 text-blue-600" />
+                  <ListTodo className="h-5 w-5 text-primary" />
                   Nhiệm vụ hôm nay
                 </h2>
               </div>
@@ -169,14 +169,14 @@ export default function Dashboard() {
                 <input
                   type="text"
                   placeholder="Thêm nhiệm vụ mới..."
-                  className="w-full bg-muted border-none rounded-xl py-3 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-foreground"
+                  className="w-full bg-muted border-none rounded-xl py-3 pl-4 pr-12 text-sm focus:ring-2 focus:ring-primary/80 outline-none text-foreground"
                   value={newTodo}
                   onChange={(e) => setNewTodo(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addTodo()}
                 />
                 <button 
                   onClick={addTodo}
-                  className="absolute right-2 top-1.5 h-9 w-9 bg-blue-600 rounded-lg flex items-center justify-center text-white hover:bg-blue-700 transition-colors"
+                  className="absolute right-2 top-1.5 h-9 w-9 bg-primary rounded-lg flex items-center justify-center text-white hover:bg-primary/90 transition-colors"
                 >
                   <Plus className="h-5 w-5" />
                 </button>
@@ -194,7 +194,7 @@ export default function Dashboard() {
                   <div key={todo.id} className="flex items-start gap-3 group animate-in fade-in slide-in-from-left-2 duration-200">
                     <button 
                       onClick={() => toggleTodo(todo.id, false)}
-                      className="mt-0.5 text-muted-foreground hover:text-blue-500 transition-colors"
+                      className="mt-0.5 text-muted-foreground hover:text-primary/80 transition-colors"
                     >
                       <Circle className="h-5 w-5" />
                     </button>
@@ -209,7 +209,7 @@ export default function Dashboard() {
                       <div key={todo.id} className="flex items-start gap-3 opacity-50 grayscale transition-all">
                         <button 
                           onClick={() => toggleTodo(todo.id, true)}
-                          className="mt-0.5 text-blue-600"
+                          className="mt-0.5 text-primary"
                         >
                           <CheckCircle2 className="h-5 w-5" />
                         </button>
@@ -222,13 +222,13 @@ export default function Dashboard() {
             </div>
 
             {/* Real-time Motivation Card */}
-            <div className="bg-blue-600 rounded-3xl p-6 text-white overflow-hidden relative group">
-              <Zap className="absolute -right-4 -bottom-4 h-32 w-32 text-blue-500/20 rotate-12 group-hover:rotate-45 transition-transform duration-700" />
+            <div className="bg-primary rounded-3xl p-6 text-white overflow-hidden relative group">
+              <Zap className="absolute -right-4 -bottom-4 h-32 w-32 text-primary/20 rotate-12 group-hover:rotate-45 transition-transform duration-700" />
               <h3 className="text-lg font-bold mb-2 relative z-10">Mẹo nhỏ hôm nay</h3>
-              <p className="text-blue-100 text-sm leading-relaxed relative z-10">
+              <p className="text-primary/20 text-sm leading-relaxed relative z-10">
                 Hãy dành ít nhất 15 phút mỗi ngày để luyện gõ code. Nó sẽ giúp ngón tay của bạn "nhớ" cú pháp nhanh hơn bất kỳ cuốn sách nào!
               </p>
-              <Button size="sm" variant="secondary" className="mt-4 bg-white text-blue-600 border-none relative z-10 hover:bg-blue-50" asChild>
+              <Button size="sm" variant="secondary" className="mt-4 bg-white text-primary border-none relative z-10 hover:bg-primary/10" asChild>
                 <Link to="/luyen-tap">Luyện tập ngay</Link>
               </Button>
             </div>

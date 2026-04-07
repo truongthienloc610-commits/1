@@ -62,7 +62,7 @@ export default function CodeAnalyzer() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-              <div className="bg-blue-600 p-2 rounded-xl text-white">
+              <div className="bg-primary p-2 rounded-xl text-white">
                 <Search className="h-6 w-6" />
               </div>
               Chẩn đoán Code
@@ -73,7 +73,7 @@ export default function CodeAnalyzer() {
           </div>
           <div className="flex items-center gap-3">
             <select 
-              className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-primary/80"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
             >
@@ -126,7 +126,7 @@ export default function CodeAnalyzer() {
               <div className="absolute bottom-6 right-6">
                 <Button 
                   size="lg"
-                  className="bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20 font-bold px-8 rounded-2xl h-14"
+                  className="bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 font-bold px-8 rounded-2xl h-14"
                   onClick={handleAnalyze}
                   disabled={analyzing}
                 >
@@ -165,9 +165,9 @@ export default function CodeAnalyzer() {
             {analyzing && (
               <div className="h-[550px] bg-white border border-slate-100 rounded-[2.5rem] p-12 flex flex-col items-center justify-center text-center space-y-8 animate-pulse">
                 <div className="flex gap-2">
-                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '200ms' }} />
-                  <div className="h-4 w-4 bg-blue-600 rounded-full animate-bounce" style={{ animationDelay: '400ms' }} />
+                  <div className="h-4 w-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="h-4 w-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: '200ms' }} />
+                  <div className="h-4 w-4 bg-primary rounded-full animate-bounce" style={{ animationDelay: '400ms' }} />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold text-slate-800 font-black">EduAI đang đọc code của bạn...</h3>
@@ -193,9 +193,9 @@ export default function CodeAnalyzer() {
 
                 <div className="p-8 space-y-8">
                   {/* Hint Section */}
-                  <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100 relative group">
-                    <Lightbulb className="absolute -top-4 -right-4 h-16 w-16 text-blue-600/10 group-hover:scale-110 transition-transform" />
-                    <h3 className="text-blue-700 font-black flex items-center gap-2 mb-3">
+                  <div className="p-6 bg-primary/10 rounded-3xl border border-primary/20 relative group">
+                    <Lightbulb className="absolute -top-4 -right-4 h-16 w-16 text-primary/10 group-hover:scale-110 transition-transform" />
+                    <h3 className="text-primary/90 font-black flex items-center gap-2 mb-3">
                       <Lightbulb className="h-5 w-5" /> Gợi ý quan trọng
                     </h3>
                     <p className="text-blue-900 font-medium leading-relaxed">

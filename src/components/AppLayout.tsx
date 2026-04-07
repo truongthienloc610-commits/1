@@ -77,10 +77,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       {/* Logo Container */}
       <div className="flex h-20 items-center px-8 border-b border-border/60">
         <Link to="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight text-foreground">
-          <div className="bg-blue-600 p-1 rounded-lg text-white">
+          <div className="bg-primary p-1 rounded-lg text-primary-foreground">
             <Code2 className="h-6 w-6" />
           </div>
-          <span>Edu<span className="text-blue-600">AI</span></span>
+          <span>Edu<span className="text-primary">AI</span></span>
         </Link>
       </div>
 
@@ -105,11 +105,11 @@ export function AppLayout({ children }: AppLayoutProps) {
                 className={cn(
                   "flex items-center gap-3 rounded-2xl px-4 py-3.5 text-sm font-bold transition-all",
                   active
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
-                <item.icon className={cn("h-5 w-5 shrink-0", active ? "text-white" : "text-muted-foreground")} />
+                <item.icon className={cn("h-5 w-5 shrink-0", active ? "text-primary-foreground" : "text-muted-foreground")} />
                 {item.label}
               </Link>
             );
@@ -132,7 +132,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* User card */}
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10 border-2 border-background shadow-sm">
-            <AvatarFallback className="bg-blue-600 text-white text-xs font-black">
+            <AvatarFallback className="bg-primary text-white text-xs font-black">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -140,7 +140,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             <p className="text-sm font-bold text-foreground truncate">
               {profile?.full_name || "Học sinh"}
             </p>
-            <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
+            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">
               {profile?.role === 'admin' ? 'Quản trị viên' : 
                profile?.role === 'operator' ? 'Nhân sự vận hành' : 'Học viên'}
             </p>
@@ -153,17 +153,30 @@ export function AppLayout({ children }: AppLayoutProps) {
             variant="outline"
             size="sm"
             className={cn(
-              "w-full justify-start gap-3 font-bold rounded-xl border-slate-200 transition-all",
-              isAdminMode ? "bg-slate-100 text-slate-900 border-slate-300" : "bg-blue-50 text-blue-600 border-blue-100"
+              "w-full justify-start gap-3 font-black rounded-xl border-slate-200 transition-all py-6",
+              isAdminMode 
+                ? "bg-slate-900 text-white border-slate-900 shadow-xl shadow-slate-900/20" 
+                : "bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white"
             )}
             onClick={() => {
-              setIsAdminMode(!isAdminMode);
-              if (!isAdminMode) navigate('/admin/dashboard');
+              const newMode = !isAdminMode;
+              setIsAdminMode(newMode);
+              if (newMode) navigate('/admin/dashboard');
               else navigate('/dashboard');
+              
+              toast({
+                title: newMode ? "Đã bật Chế độ Quản trị 🛡️" : "Đã về Chế độ Học viên 🎓",
+                description: newMode ? "Bạn hiện đang xem các công cụ quản lý hệ thống." : "Chào mừng bạn quay lại học tập!",
+              });
             }}
           >
-            <ShieldCheck className="h-4 w-4" />
-            {isAdminMode ? "Chế độ Học viên" : "Chế độ Quản trị"}
+            <ShieldCheck className={cn("h-5 w-5", isAdminMode ? "text-blue-400" : "text-primary")} />
+            <div className="flex flex-col items-start translate-y-[-1px]">
+              <span className="text-xs uppercase tracking-tighter">Chế độ</span>
+              <span className="text-[10px] font-black uppercase tracking-widest opacity-80">
+                {isAdminMode ? "Quản trị" : "Học viên"}
+              </span>
+            </div>
           </Button>
         )}
 
@@ -214,7 +227,7 @@ export function AppLayout({ children }: AppLayoutProps) {
               <Menu className="h-6 w-6" />
             </Button>
             <Link to="/dashboard" className="flex items-center gap-2 font-bold text-lg text-foreground">
-              <Code2 className="h-5 w-5 text-blue-600" />
+              <Code2 className="h-5 w-5 text-primary" />
               <span>EduAI</span>
             </Link>
           </div>

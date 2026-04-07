@@ -8,7 +8,7 @@ export function PublicFooter() {
         <div className="flex flex-col md:flex-row justify-between gap-12">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2 font-extrabold text-2xl tracking-tight text-foreground">
-              <div className="bg-blue-600 h-8 w-8 rounded-lg text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="bg-primary h-8 w-8 rounded-lg text-white flex items-center justify-center shadow-lg shadow-primary/20">
                 <Code2 className="h-4 w-4" />
               </div>
               <span>EduAI</span>

@@ -298,7 +298,7 @@ export default function Exams() {
         {completedSessions.length > 0 && (
           <div className="grid grid-cols-3 gap-3 mb-6">
             {[
-              { label: "Đề đã làm", value: completedSessions.length, icon: FileText, color: "text-blue-500" },
+              { label: "Đề đã làm", value: completedSessions.length, icon: FileText, color: "text-primary/80" },
               { label: "Điểm TB", value: `${avgScore}%`, icon: Trophy, color: "text-yellow-500" },
               {
                 label: "Đúng TB",

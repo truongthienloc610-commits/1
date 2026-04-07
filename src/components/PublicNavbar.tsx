@@ -19,7 +19,7 @@ export function PublicNavbar() {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 font-extrabold text-xl tracking-tight text-foreground shrink-0">
-          <div className="bg-blue-600 h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <div className="bg-primary h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-primary/20">
             <Code2 className="h-5 w-5" />
           </div>
           <span className="hidden sm:inline">EduAI</span>
@@ -44,7 +44,7 @@ export function PublicNavbar() {
           <Button variant="ghost" size="sm" className="text-foreground font-bold px-4" asChild>
             <Link to="/dang-nhap">Đăng nhập</Link>
           </Button>
-          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 shadow-xl shadow-blue-500/20 px-6 font-bold rounded-xl" asChild>
+          <Button size="sm" className="bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 px-6 font-bold rounded-xl" asChild>
             <Link to="/dang-ky">Đăng ký</Link>
           </Button>
         </div>
@@ -76,7 +76,7 @@ export function PublicNavbar() {
             <Button variant="ghost" asChild className="justify-start text-lg font-bold text-foreground px-0">
               <Link to="/dang-nhap" onClick={() => setOpen(false)}>Đăng nhập</Link>
             </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700 w-full h-12 text-lg font-bold shadow-lg shadow-blue-500/20" asChild>
+            <Button className="bg-primary hover:bg-primary/90 w-full h-12 text-lg font-bold shadow-lg shadow-primary/20" asChild>
               <Link to="/dang-ky" onClick={() => setOpen(false)}>Đăng ký</Link>
             </Button>
           </nav>

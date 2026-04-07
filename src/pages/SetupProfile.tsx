@@ -63,10 +63,10 @@ export default function SetupProfile() {
       <div className="max-w-md w-full space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="space-y-4 text-center">
           <div className="inline-flex items-center gap-2 font-black text-3xl tracking-tighter text-slate-900">
-            <div className="bg-blue-600 p-1.5 rounded-xl text-white">
+            <div className="bg-primary p-1.5 rounded-xl text-white">
               <Code2 className="h-8 w-8" />
             </div>
-            <span>Edu<span className="text-blue-600">AI</span></span>
+            <span>Edu<span className="text-primary">AI</span></span>
           </div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Bắt đầu hành trình! 👋</h1>
           <p className="text-slate-500 font-medium">
@@ -85,14 +85,14 @@ export default function SetupProfile() {
               placeholder="Ví dụ: Nguyễn Văn A"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="h-16 px-6 rounded-2xl bg-white border-slate-200 text-xl font-bold text-slate-900 focus:ring-4 focus:ring-blue-100 outline-none transition-all"
+              className="h-16 px-6 rounded-2xl bg-white border-slate-200 text-xl font-bold text-slate-900 focus:ring-4 focus:ring-primary/20 outline-none transition-all"
             />
           </div>
 
           <Button 
             type="submit" 
             disabled={loading}
-            className="w-full h-16 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xl font-black shadow-xl shadow-blue-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white text-xl font-black shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             {loading ? (
               <div className="h-6 w-6 border-3 border-white/20 border-t-white rounded-full animate-spin" />

@@ -132,7 +132,7 @@ export default function CourseManagement() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight dark:text-white">
-              Quản lý <span className="text-blue-600">Khóa học</span>
+              Quản lý <span className="text-primary">Khóa học</span>
             </h1>
             <p className="text-slate-500 font-medium mt-2">
               Xây dựng lộ trình học tập bài bản cho hàng ngàn học sinh.
@@ -145,7 +145,7 @@ export default function CourseManagement() {
                   setEditingRoadmap(null);
                   setRoadmapForm({ title: "", description: "", role_type: "Frontend" });
                 }}
-                className="h-14 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-xl shadow-blue-500/20 gap-3"
+                className="h-14 px-8 rounded-2xl bg-primary hover:opacity-90 text-primary-foreground font-black shadow-xl shadow-primary/20 gap-3"
               >
                 <Plus className="h-5 w-5" /> Tạo lộ trình mới
               </Button>
@@ -227,14 +227,14 @@ export default function CourseManagement() {
               >
                 <CardHeader className="p-8 pb-0">
                   <div className="flex justify-between items-start mb-4">
-                    <div className="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                       <BookOpen className="h-7 w-7" />
                     </div>
                     <Badge className="bg-slate-100 text-slate-500 border-none font-black tracking-widest text-[10px] uppercase px-3">
                       {roadmap.role_type}
                     </Badge>
                   </div>
-                  <CardTitle className="text-2xl font-black text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
+                  <CardTitle className="text-2xl font-black text-slate-900 leading-tight group-hover:text-primary transition-colors">
                     {roadmap.title}
                   </CardTitle>
                 </CardHeader>
@@ -281,7 +281,7 @@ export default function CourseManagement() {
                 setRoadmapForm({ title: "", description: "", role_type: "Frontend" });
                 setIsRoadmapDialogOpen(true);
               }}
-              className="h-full min-h-[300px] border-4 border-dashed border-slate-100 rounded-[2.5rem] flex flex-col items-center justify-center gap-4 text-slate-300 hover:text-blue-600 hover:border-blue-100 hover:bg-blue-50/30 transition-all group"
+              className="h-full min-h-[300px] border-4 border-dashed border-slate-100 rounded-[2.5rem] flex flex-col items-center justify-center gap-4 text-slate-300 hover:text-primary hover:border-primary/20 hover:bg-primary/5 transition-all group"
             >
               <Plus className="h-10 w-10 group-hover:scale-110 transition-transform" />
               <span className="font-black text-lg tracking-tight">Thêm lộ trình mới</span>

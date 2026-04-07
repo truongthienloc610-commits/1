@@ -76,7 +76,7 @@ export default function Login() {
         <div className="auth-form-wrapper space-y-8 px-4">
           <div className="space-y-2">
             <Link to="/" className="inline-flex items-center gap-2 font-extrabold text-2xl tracking-tight text-slate-900 mb-4 transition-transform hover:scale-105">
-              <div className="bg-blue-600 h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="bg-primary h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-primary/20">
                 <Code2 className="h-5 w-5" />
               </div>
               EduAI

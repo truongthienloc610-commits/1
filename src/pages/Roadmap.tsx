@@ -37,7 +37,7 @@ export default function Roadmap() {
   const [loading, setLoading] = useState(true);
 
   const roles = [
-    { id: "basics", title: "Lập trình là gì?", desc: "Dành cho người mới bắt đầu từ con số 0.", icon: Compass, color: "bg-blue-50 text-blue-600" },
+    { id: "basics", title: "Lập trình là gì?", desc: "Dành cho người mới bắt đầu từ con số 0.", icon: Compass, color: "bg-primary/10 text-primary" },
     { id: "frontend", title: "Frontend Developer", desc: "Xây dựng giao diện web đẹp mắt với HTML/CSS/JS.", icon: Layout, color: "bg-purple-50 text-purple-600" },
     { id: "backend", title: "Backend Developer", desc: "Xử lý logic, database và server-side.", icon: Code, color: "bg-green-50 text-green-600" },
     { id: "data", title: "Data Analyst", desc: "Phân tích dữ liệu và tìm kiếm thông tin hữu ích.", icon: Database, color: "bg-orange-50 text-orange-600" },
@@ -137,7 +137,7 @@ export default function Roadmap() {
               <div 
                 key={role.id}
                 onClick={() => handleRoleSelect(role.id)}
-                className="group p-8 rounded-3xl border border-slate-100 bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all cursor-pointer relative overflow-hidden"
+                className="group p-8 rounded-3xl border border-slate-100 bg-white hover:border-blue-200 hover:shadow-xl hover:shadow-primary/20 transition-all cursor-pointer relative overflow-hidden"
               >
                 <div className="relative z-10 space-y-6">
                   <div className={`h-14 w-14 rounded-2xl ${role.color} flex items-center justify-center transition-transform group-hover:scale-110`}>
@@ -147,7 +147,7 @@ export default function Roadmap() {
                     <h3 className="text-2xl font-bold text-slate-900">{role.title}</h3>
                     <p className="text-slate-500 leading-relaxed">{role.desc}</p>
                   </div>
-                  <div className="flex items-center text-blue-600 font-bold gap-2 group-hover:gap-4 transition-all">
+                  <div className="flex items-center text-primary font-bold gap-2 group-hover:gap-4 transition-all">
                     Xem lộ trình <ArrowRight className="h-5 w-5" />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export default function Roadmap() {
                   onClick={() => setCurrentStep(step)}
                   className={`w-full flex items-center gap-3 p-4 rounded-2xl transition-all text-left ${
                     currentStep?.id === step.id 
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20" 
+                    ? "bg-primary text-white shadow-lg shadow-primary/20" 
                     : "hover:bg-slate-50 text-slate-600"
                   }`}
                 >
@@ -217,12 +217,12 @@ export default function Roadmap() {
               {/* Header */}
               <div className="p-8 border-b border-slate-50">
                 <div className="flex items-center justify-between gap-4 mb-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-wider">
                     Bước {currentStep.order_index}
                   </div>
                   <Button 
                     variant={currentStep.completed ? "outline" : "default"}
-                    className={currentStep.completed ? "border-green-100 text-green-600 hover:bg-green-50" : "bg-blue-600 hover:bg-blue-700"}
+                    className={currentStep.completed ? "border-green-100 text-green-600 hover:bg-green-50" : "bg-primary hover:bg-primary/90"}
                     onClick={() => toggleComplete(currentStep.id)}
                   >
                     {currentStep.completed ? (
@@ -252,7 +252,7 @@ export default function Roadmap() {
 
               {/* Theory Content */}
               <div className="p-8 space-y-8">
-                <div className="prose prose-slate max-w-none prose-headings:font-bold prose-h3:text-blue-600">
+                <div className="prose prose-slate max-w-none prose-headings:font-bold prose-h3:text-primary">
                   <h3 className="flex items-center gap-2 mb-6">
                     <BookOpen className="h-5 w-5" /> Lý thuyết & Tip
                   </h3>
@@ -275,7 +275,7 @@ export default function Roadmap() {
                     <ArrowLeft className="h-4 w-4 mr-2" /> Bài trước
                   </Button>
                   <Button 
-                    className="bg-blue-600 hover:bg-blue-700 font-bold"
+                    className="bg-primary hover:bg-primary/90 font-bold"
                     onClick={() => {
                       const next = steps[steps.indexOf(currentStep) + 1];
                       if (next) setCurrentStep(next);

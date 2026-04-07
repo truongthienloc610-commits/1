@@ -12,7 +12,7 @@ const features = [
     icon: Compass, 
     title: "Định hướng rõ ràng", 
     desc: "Không còn học lan man. Chúng mình giúp bạn tập trung vào những nền tảng cốt lõi nhất để bắt đầu sự nghiệp.",
-    color: "bg-blue-50 text-blue-600"
+    color: "bg-primary/10 text-primary"
   },
   { 
     icon: Code, 
@@ -36,15 +36,15 @@ export default function Landing() {
       {/* Hero Section */}
       <section className="relative pt-12 pb-24 lg:pt-32 lg:pb-48 overflow-hidden bg-background">
         {/* Background blobs for elite feel */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl -z-10" />
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-primary/20 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-50/30 rounded-full blur-3xl -z-10" />
 
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
             {/* Left Content */}
             <div className="flex-1 space-y-8 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50/80 text-blue-600 rounded-full text-xs lg:text-sm font-extrabold uppercase tracking-[0.2em] transition-all backdrop-blur-sm border border-blue-100/50 shadow-sm animate-in fade-in slide-in-from-left-4 duration-700">
-                <Star className="h-4 w-4 fill-blue-600" /> AI-powered Education Platform
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-primary/20 text-primary rounded-full text-xs lg:text-sm font-extrabold uppercase tracking-[0.2em] transition-all backdrop-blur-sm border border-primary/20 shadow-sm animate-in fade-in slide-in-from-left-4 duration-700">
+                <Star className="h-4 w-4 fill-primary" /> AI-powered Education Platform
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-foreground leading-tight lg:leading-[1.15] tracking-tight animate-in fade-in slide-in-from-left-6 duration-1000">
@@ -57,7 +57,7 @@ export default function Landing() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-                <Button size="lg" className="h-14 px-10 text-lg bg-blue-600 hover:bg-blue-700 shadow-2xl shadow-blue-500/30 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 group" asChild>
+                <Button size="lg" className="h-14 px-10 text-lg bg-primary hover:bg-primary/90 shadow-2xl shadow-primary/20 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 group" asChild>
                   <Link to="/dang-ky">
                     Bắt đầu ngay
                     <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -90,7 +90,7 @@ export default function Landing() {
                      />
                    </div>
                 </div>
-                <div className="absolute -top-12 -left-12 h-32 w-32 bg-blue-500/10 rounded-full blur-2xl animate-pulse" />
+                <div className="absolute -top-12 -left-12 h-32 w-32 bg-primary/20 rounded-full blur-2xl animate-pulse" />
                 <div className="absolute -bottom-12 -right-12 h-40 w-40 bg-purple-500/10 rounded-full blur-2xl animate-pulse delay-700" />
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function Landing() {
               <div 
                 key={f.title} 
                 style={{ animationDelay: `${i * 100}ms` }}
-                className="group p-10 rounded-[2.5rem] border border-border bg-card hover:border-primary/40 transition-all hover:shadow-2xl hover:shadow-blue-500/5 cursor-default animate-in fade-in slide-in-from-bottom-8 duration-700"
+                className="group p-10 rounded-[2.5rem] border border-border bg-card hover:border-primary/40 transition-all hover:shadow-2xl hover:shadow-primary/20 cursor-default animate-in fade-in slide-in-from-bottom-8 duration-700"
               >
                 <div className={`h-16 w-16 rounded-3xl ${f.color} flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
                   <f.icon className="h-8 w-8" />
@@ -138,11 +138,11 @@ export default function Landing() {
               </p>
               <div className="grid grid-cols-2 gap-8 pt-4">
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-blue-600">99%</div>
+                  <div className="text-3xl font-bold text-primary">99%</div>
                   <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Học viên hài lòng</div>
                 </div>
                 <div className="space-y-2">
-                  <div className="text-3xl font-bold text-blue-600">10k+</div>
+                  <div className="text-3xl font-bold text-primary">10k+</div>
                   <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Lộ trình được tạo</div>
                 </div>
               </div>
@@ -150,7 +150,7 @@ export default function Landing() {
             
             <div className="flex-1 w-full animate-in fade-in slide-in-from-right-8 duration-1000">
                <div className="glass-card rounded-[3rem] p-12 border border-border shadow-2xl relative overflow-hidden group">
-                  <div className="absolute top-0 left-0 w-2 h-full bg-blue-600 group-hover:w-4 transition-all" />
+                  <div className="absolute top-0 left-0 w-2 h-full bg-primary group-hover:w-4 transition-all" />
                   <div className="space-y-8 relative z-10">
                      <div className="flex items-center gap-4">
                         <div className="h-12 w-12 rounded-full bg-muted border-2 border-background shadow-sm flex items-center justify-center">
@@ -186,7 +186,7 @@ export default function Landing() {
             Gia nhập cộng đồng lập trình viên tự học, có định hướng và làm chủ tương lai bằng niềm đam mê mãnh liệt.
           </p>
           <div className="pt-6">
-            <Button size="lg" className="h-16 px-12 text-xl bg-blue-600 hover:bg-blue-700 shadow-[0_20px_50px_rgba(37,99,235,0.3)] border-none rounded-2xl transform transition-all hover:scale-110 active:scale-95 font-bold group" asChild>
+            <Button size="lg" className="h-16 px-12 text-xl bg-primary hover:bg-primary/90 shadow-[0_20px_50px_rgba(37,99,235,0.3)] border-none rounded-2xl transform transition-all hover:scale-110 active:scale-95 font-bold group" asChild>
               <Link to="/dang-ky">
                 Tạo tài khoản miễn phí 
                 <ArrowRight className="h-6 w-6 ml-3 group-hover:translate-x-2 transition-transform" />

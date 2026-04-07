@@ -96,7 +96,7 @@ export default function Register() {
         <div className="auth-form-wrapper space-y-6 px-4 py-8">
           <div className="space-y-2">
             <Link to="/" className="inline-flex items-center gap-2 font-extrabold text-2xl tracking-tight text-slate-900 mb-2 transition-transform hover:scale-105">
-              <div className="bg-blue-600 h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-blue-500/20">
+              <div className="bg-primary h-9 w-9 rounded-xl text-white flex items-center justify-center shadow-lg shadow-primary/20">
                 <Code2 className="h-5 w-5" />
               </div>
               EduAI

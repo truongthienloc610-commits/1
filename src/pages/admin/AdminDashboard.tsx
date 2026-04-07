@@ -64,6 +64,7 @@ export default function AdminDashboard() {
     // Chuyển sang HSL để khớp với config của Tailwind/Shadcn
     const hslValue = hexToHSLComponents(color);
     document.documentElement.style.setProperty('--primary', hslValue);
+    document.documentElement.style.setProperty('--ring', hslValue);
     
     toast({
       title: "Đã cập nhật Theme! ✨",
@@ -147,7 +148,7 @@ export default function AdminDashboard() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight dark:text-white">
-              Bảng <span className="text-blue-600">Quản trị</span>
+              Bảng <span className="text-primary">Quản trị</span>
             </h1>
             <p className="text-slate-500 font-medium mt-2">
               Chào mừng quay lại, Quản trị viên. Hệ thống đang hoạt động ổn định.
@@ -171,7 +172,7 @@ export default function AdminDashboard() {
               <Github className={cn("h-5 w-5", isSyncing && "animate-spin")} />
               {isSyncing ? "Đang đồng bộ..." : "Đẩy lên GitHub"}
             </Button>
-            <Button className="h-14 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-xl shadow-blue-500/20 gap-3">
+            <Button className="h-14 px-8 rounded-2xl bg-primary hover:opacity-90 text-primary-foreground font-black shadow-xl shadow-primary/20 gap-3">
               <UserPlus className="h-5 w-5" /> Thêm thành viên
             </Button>
           </div>
@@ -184,7 +185,7 @@ export default function AdminDashboard() {
           <Card className="border-none shadow-2xl shadow-slate-200/50 bg-white rounded-[2.5rem] overflow-hidden">
             <CardHeader className="p-8 pb-0">
               <CardTitle className="text-xl font-black flex items-center gap-2">
-                <Palette className="h-5 w-5 text-blue-600" /> Tùy chỉnh Giao diện
+                <Palette className="h-5 w-5 text-primary" /> Tùy chỉnh Giao diện
               </CardTitle>
               <CardDescription className="font-medium">Thay đổi tông màu chủ đạo cho toàn bộ EduAI.</CardDescription>
             </CardHeader>
@@ -284,7 +285,7 @@ export default function AdminDashboard() {
                         className={cn(
                           "font-black tracking-widest text-[9px] px-2",
                           u.role === 'admin' ? "bg-red-50 text-red-600" : 
-                          u.role === 'operator' ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-500"
+                          u.role === 'operator' ? "bg-primary/10 text-primary" : "bg-slate-100 text-slate-500"
                         )}
                       >
                         {u.role}

@@ -16,7 +16,7 @@ export default function OperatorDashboard() {
       <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight dark:text-white">
-            Giám sát <span className="text-blue-600">Vận hành</span>
+            Giám sát <span className="text-primary">Vận hành</span>
           </h1>
           <p className="text-slate-500 font-medium mt-2">
             Theo dõi chất lượng phản hồi của AI Mentor và hiệu năng hệ thống theo thời gian thực.
@@ -25,15 +25,15 @@ export default function OperatorDashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="border-none shadow-xl shadow-blue-500/5 bg-blue-50/50">
+          <Card className="border-none shadow-xl shadow-primary/20 bg-primary/20">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xs font-black text-blue-600 uppercase tracking-widest flex items-center gap-2">
+              <CardTitle className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" /> Tổng số yêu cầu
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-black text-slate-900 tracking-tight">1,284</div>
-              <p className="text-xs font-bold text-blue-600 mt-1">+12% so với hôm qua</p>
+              <p className="text-xs font-bold text-primary mt-1">+12% so với hôm qua</p>
             </CardContent>
           </Card>
 
@@ -117,7 +117,7 @@ export default function OperatorDashboard() {
                       )}
                     </td>
                     <td className="px-8 py-6 text-right">
-                      <button className="text-blue-600 font-black text-xs uppercase tracking-widest hover:underline">Chi tiết</button>
+                      <button className="text-primary font-black text-xs uppercase tracking-widest hover:underline">Chi tiết</button>
                     </td>
                   </tr>
                 ))}

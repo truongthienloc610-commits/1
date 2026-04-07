@@ -57,7 +57,7 @@ export default function Profile() {
       label: "Tổng giờ học",
       value: `${Math.floor((profile?.total_study_minutes ?? 0) / 60)}h ${(profile?.total_study_minutes ?? 0) % 60}m`,
       icon: Clock,
-      color: "text-blue-500",
+      color: "text-primary/80",
     },
   ];
 

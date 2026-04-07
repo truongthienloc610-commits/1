@@ -15,7 +15,7 @@ export function ProtectedRoute({ children, allowedRoles }: Props) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4 animate-in fade-in duration-500">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-600 border-t-transparent shadow-lg shadow-blue-500/20" />
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-primary border-t-transparent shadow-lg shadow-primary/20" />
           <div className="text-sm font-black text-slate-400 uppercase tracking-widest italic animate-pulse">
             EduAI is loading...
           </div>
