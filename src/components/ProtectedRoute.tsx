@@ -1,11 +1,13 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import type { EduRole } from "@/contexts/AuthContext";
 
 interface Props {
   children: React.ReactNode;
+  allowedRoles?: EduRole[];
 }
 
-export function ProtectedRoute({ children }: Props) {
+export function ProtectedRoute({ children, allowedRoles }: Props) {
   const { user, profile, loading } = useAuth();
   const location = useLocation();
 
@@ -35,5 +37,11 @@ export function ProtectedRoute({ children }: Props) {
     return <Navigate to="/thiet-lap-ho-so" replace />;
   }
 
+  // Kiểm tra quyền truy cập dựa trên role
+  if (allowedRoles && profile && !allowedRoles.includes(profile.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return <>{children}</>;
 }
+

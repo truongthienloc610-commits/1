@@ -23,6 +23,8 @@ import FocusRoom from "./pages/FocusRoom";
 import SetupProfile from "./pages/SetupProfile";
 import CareerOrientation from "@/pages/CareerOrientation";
 import CodeAnalyzer from "./pages/CodeAnalyzer";
+import OperatorDashboard from "./pages/operator/OperatorDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 // Khởi tạo React Query để quản lý bộ nhớ đệm (Cache) dữ liệu
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -84,6 +86,13 @@ function AppRoutes() {
       <Route path="/dinh-huong" element={<ProtectedRoute><CareerOrientation /></ProtectedRoute>} />
       <Route path="/dinh_huong" element={<Navigate to="/dinh-huong" replace />} />
 
+      {/* 3. Các trang dành cho vận hành (Operator) */}
+      <Route path="/operator/logs" element={<ProtectedRoute allowedRoles={["operator", "admin"]}><OperatorDashboard /></ProtectedRoute>} />
+      <Route path="/operator/jobs" element={<ProtectedRoute allowedRoles={["operator", "admin"]}><OperatorDashboard /></ProtectedRoute>} />
+
+      {/* 4. Các trang dành cho quản trị (Admin) */}
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
+
       {/* 404 - Trang không tìm thấy */}
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -98,7 +107,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
  */
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system" storageKey="hocai-theme">
+    <ThemeProvider defaultTheme="light" storageKey="hocai-theme">
       <AuthProvider>
         <TooltipProvider>
           <Toaster /> {/* Hiển thị thông báo góc dưới */}

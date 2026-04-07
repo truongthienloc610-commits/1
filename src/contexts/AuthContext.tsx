@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 // --- ĐỊNH NGHĨA NGƯỜI DÙNG (PROFILE) ---
 
@@ -58,6 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Hàm lấy thông tin chi tiết từ bảng 'edu_profiles' dựa trên ID người dùng
   const fetchProfile = async (userId: string) => {
+    if (!isSupabaseConfigured) return;
     const { data, error } = await supabase
       .from("edu_profiles")
       .select("*")
@@ -68,11 +69,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Hàm tiện ích để cập nhật lại thông tin cá nhân khi cần
   const refreshProfile = async () => {
+    if (!isSupabaseConfigured) return;
     if (user) await fetchProfile(user.id);
   };
 
   // Hàm đăng xuất: Xóa sạch dữ liệu trong state và Supabase
   const signOut = async () => {
+    if (!isSupabaseConfigured) return;
     await supabase.auth.signOut();
     setUser(null);
     setSession(null);
@@ -80,6 +83,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      return;
+    }
+
     // 1. Kiểm tra phiên đăng nhập ngay khi ứng dụng vừa mở
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);

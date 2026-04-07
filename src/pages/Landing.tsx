@@ -30,11 +30,11 @@ const features = [
 
 export default function Landing() {
   return (
-    <div className="min-h-screen flex flex-col bg-white overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-background text-foreground overflow-hidden">
       <PublicNavbar />
 
       {/* Hero Section */}
-      <section className="relative pt-12 pb-24 lg:pt-32 lg:pb-48 overflow-hidden bg-white">
+      <section className="relative pt-12 pb-24 lg:pt-32 lg:pb-48 overflow-hidden bg-background">
         {/* Background blobs for elite feel */}
         <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-50/30 rounded-full blur-3xl -z-10" />
@@ -47,12 +47,12 @@ export default function Landing() {
                 <Star className="h-4 w-4 fill-blue-600" /> AI-powered Education Platform
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-slate-900 leading-tight lg:leading-[1.15] tracking-tight animate-in fade-in slide-in-from-left-6 duration-1000">
+              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-foreground leading-tight lg:leading-[1.15] tracking-tight animate-in fade-in slide-in-from-left-6 duration-1000">
                 Nâng tầm tri thức <br />
                 <span className="text-gradient-blue">Bằng sức mạnh AI</span>
               </h1>
               
-              <p className="text-lg lg:text-xl text-slate-500 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium animate-in fade-in slide-in-from-left-8 duration-1000 delay-200">
+              <p className="text-lg lg:text-xl text-muted-foreground max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium animate-in fade-in slide-in-from-left-8 duration-1000 delay-200">
                 EduAI là nền tảng học tập thông minh giúp bạn tóm tắt tài liệu, tạo lộ trình học tập cá nhân hóa và quản lý thời gian hiệu quả nhất.
               </p>
 
@@ -63,7 +63,7 @@ export default function Landing() {
                     <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="ghost" className="h-14 px-8 text-lg text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition-all" asChild>
+                <Button size="lg" variant="ghost" className="h-14 px-8 text-lg text-foreground font-bold hover:bg-muted rounded-2xl transition-all" asChild>
                   <a href="#features">
                     Tìm hiểu thêm
                   </a>
@@ -99,11 +99,11 @@ export default function Landing() {
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 lg:py-32 bg-slate-50/30 border-y border-slate-100 relative overflow-hidden">
+      <section id="features" className="py-24 lg:py-32 bg-muted/20 border-y border-border relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-4 mb-20 max-w-3xl mx-auto">
-            <h2 className="text-3xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">Học thông minh, tiến xa hơn</h2>
-            <p className="text-lg text-slate-500 leading-relaxed font-medium">Bất kể bạn bắt đầu từ đâu, EduAI luôn có giải pháp tối ưu cho hành trình học tập của bạn.</p>
+            <h2 className="text-3xl lg:text-5xl font-extrabold text-foreground tracking-tight">Học thông minh, tiến xa hơn</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed font-medium">Bất kể bạn bắt đầu từ đâu, EduAI luôn có giải pháp tối ưu cho hành trình học tập của bạn.</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8 relative z-10">
@@ -111,13 +111,13 @@ export default function Landing() {
               <div 
                 key={f.title} 
                 style={{ animationDelay: `${i * 100}ms` }}
-                className="group p-10 rounded-[2.5rem] border border-slate-100 bg-white hover:border-blue-200 transition-all hover:shadow-2xl hover:shadow-blue-500/5 cursor-default animate-in fade-in slide-in-from-bottom-8 duration-700"
+                className="group p-10 rounded-[2.5rem] border border-border bg-card hover:border-primary/40 transition-all hover:shadow-2xl hover:shadow-blue-500/5 cursor-default animate-in fade-in slide-in-from-bottom-8 duration-700"
               >
                 <div className={`h-16 w-16 rounded-3xl ${f.color} flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500`}>
                   <f.icon className="h-8 w-8" />
                 </div>
-                <h3 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight group-hover:text-blue-600 transition-colors">{f.title}</h3>
-                <p className="text-slate-500 leading-loose font-medium text-lg">{f.desc}</p>
+                <h3 className="text-2xl font-extrabold text-foreground mb-4 tracking-tight group-hover:text-primary transition-colors">{f.title}</h3>
+                <p className="text-muted-foreground leading-loose font-medium text-lg">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -125,43 +125,43 @@ export default function Landing() {
       </section>
 
       {/* Trust & Transition Section */}
-      <section id="about" className="py-32 bg-white relative overflow-hidden">
+      <section id="about" className="py-32 bg-background relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-16">
             <div className="flex-1 space-y-8 animate-in fade-in slide-in-from-left-8 duration-1000">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-bold uppercase tracking-wider">
                 <Target className="h-4 w-4" /> Cam kết chất lượng
               </div>
-              <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight">Giải quyết nỗi đau mang tên "Không biết học gì"</h2>
-              <p className="text-lg text-slate-500 leading-loose font-medium italic">
+              <h2 className="text-4xl lg:text-5xl font-extrabold text-foreground leading-tight">Giải quyết nỗi đau mang tên "Không biết học gì"</h2>
+              <p className="text-lg text-muted-foreground leading-loose font-medium italic">
                 "Thế giới công nghệ quá rộng lớn khiến newbie bị ngợp. EduAI sinh ra để làm 'bộ lưới lọc', chỉ giữ lại những gì thực sự cốt lõi nhất để bạn tự tin bước vào nghề."
               </p>
               <div className="grid grid-cols-2 gap-8 pt-4">
                 <div className="space-y-2">
                   <div className="text-3xl font-bold text-blue-600">99%</div>
-                  <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">Học viên hài lòng</div>
+                  <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Học viên hài lòng</div>
                 </div>
                 <div className="space-y-2">
                   <div className="text-3xl font-bold text-blue-600">10k+</div>
-                  <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">Lộ trình được tạo</div>
+                  <div className="text-sm font-bold text-muted-foreground uppercase tracking-widest">Lộ trình được tạo</div>
                 </div>
               </div>
             </div>
             
             <div className="flex-1 w-full animate-in fade-in slide-in-from-right-8 duration-1000">
-               <div className="glass-card rounded-[3rem] p-12 border border-slate-200 shadow-2xl relative overflow-hidden group">
+               <div className="glass-card rounded-[3rem] p-12 border border-border shadow-2xl relative overflow-hidden group">
                   <div className="absolute top-0 left-0 w-2 h-full bg-blue-600 group-hover:w-4 transition-all" />
                   <div className="space-y-8 relative z-10">
                      <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-slate-50 border-2 border-white shadow-sm flex items-center justify-center">
-                           <Github className="h-6 w-6 text-slate-700" />
+                        <div className="h-12 w-12 rounded-full bg-muted border-2 border-background shadow-sm flex items-center justify-center">
+                           <Github className="h-6 w-6 text-foreground" />
                         </div>
                         <div>
-                           <h4 className="font-bold text-slate-900">Sẵn sàng cho thực tế</h4>
-                           <p className="text-xs text-slate-400 uppercase tracking-widest font-bold">Bridge to Professional Career</p>
+                           <h4 className="font-bold text-foreground">Sẵn sàng cho thực tế</h4>
+                           <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Bridge to Professional Career</p>
                         </div>
                      </div>
-                     <p className="text-slate-600 text-lg leading-relaxed font-medium">
+                     <p className="text-muted-foreground text-lg leading-relaxed font-medium">
                         Sau EduAI, bạn không chỉ có kiến thức. Bạn sẽ làm chủ được <strong>Git Flow</strong>, tự tin đọc Documentation trên <strong>GitHub</strong> và sẵn sàng chinh phục các thử thách tại <strong>LeetCode</strong>.
                      </p>
                      <div className="flex items-center gap-4 pt-4 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
@@ -182,7 +182,7 @@ export default function Landing() {
         
         <div className="container mx-auto px-4 text-center relative z-10 space-y-10">
           <h2 className="text-5xl lg:text-7xl font-extrabold text-white tracking-tighter">Bắt đầu hành trình của bạn ngày hôm nay</h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-loose font-medium">
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-loose font-medium">
             Gia nhập cộng đồng lập trình viên tự học, có định hướng và làm chủ tương lai bằng niềm đam mê mãnh liệt.
           </p>
           <div className="pt-6">

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Code2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { useNavigate } from "react-router-dom";
 import { AuthIllustration } from "@/components/AuthIllustration";
 import "@/styles/auth.css";
@@ -20,6 +20,14 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Chưa cấu hình Supabase",
+        description: "Vui lòng cập nhật VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY trong file .env",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!email || !password) {
       toast({ title: "Vui lòng nhập đầy đủ thông tin", variant: "destructive" });
       return;
@@ -42,6 +50,14 @@ export default function Login() {
   };
 
   const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Chưa cấu hình Supabase",
+        description: "Không thể đăng nhập Google khi .env còn placeholder.",
+        variant: "destructive",
+      });
+      return;
+    }
     const redirectUrl = window.location.origin;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

@@ -82,20 +82,20 @@ export default function Dashboard() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
               Chào {profile?.full_name?.split(" ").at(-1) ?? "bạn"}! 👋
             </h1>
-            <p className="text-slate-500 mt-1 font-medium">
+            <p className="text-muted-foreground mt-1 font-medium">
               Bạn đang làm rất tốt. Hãy tiếp tục giữ vững phong độ nhé!
             </p>
           </div>
-          <div className="flex items-center gap-4 bg-blue-50 border border-blue-100 px-6 py-4 rounded-2xl shadow-sm">
-            <div className="h-12 w-12 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+          <div className="flex items-center gap-4 bg-card border border-border px-6 py-4 rounded-2xl shadow-sm">
+            <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground">
               <Flame className="h-6 w-6 fill-current" />
             </div>
             <div>
-              <p className="text-sm font-bold text-blue-600 uppercase tracking-wider">Chuỗi học tập</p>
-              <p className="text-2xl font-black text-slate-900">{profile?.streak_count ?? 0} ngày</p>
+              <p className="text-sm font-bold text-primary uppercase tracking-wider">Chuỗi học tập</p>
+              <p className="text-2xl font-black text-foreground">{profile?.streak_count ?? 0} ngày</p>
             </div>
           </div>
         </div>
@@ -105,32 +105,32 @@ export default function Dashboard() {
           <div className="lg:col-span-2 space-y-8">
             {/* Quick Progress Cards */}
             <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-none hover:border-blue-200 transition-all group">
+              <div className="bg-card border border-border p-6 rounded-2xl shadow-none hover:border-blue-200 transition-all group">
                 <div className="flex items-center justify-between mb-4">
                   <div className="h-10 w-10 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center">
                     <Zap className="h-5 w-5 fill-current" />
                   </div>
-                  <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-blue-500 transition-colors" />
                 </div>
-                <h3 className="font-bold text-slate-900">Bắt đầu học ngay</h3>
-                <p className="text-sm text-slate-500 mt-1">Tiếp tục lộ trình của bạn để không bỏ lỡ kiến thức.</p>
+                <h3 className="font-bold text-foreground">Bắt đầu học ngay</h3>
+                <p className="text-sm text-muted-foreground mt-1">Tiếp tục lộ trình của bạn để không bỏ lỡ kiến thức.</p>
               </div>
-              <div className="bg-white border border-slate-100 p-6 rounded-2xl shadow-none hover:border-green-200 transition-all group">
+              <div className="bg-card border border-border p-6 rounded-2xl shadow-none hover:border-green-200 transition-all group">
                 <div className="flex items-center justify-between mb-4">
                   <div className="h-10 w-10 rounded-lg bg-green-50 text-green-500 flex items-center justify-center">
                     <Map className="h-5 w-5" />
                   </div>
-                  <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-green-500 transition-colors" />
+                  <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-green-500 transition-colors" />
                 </div>
-                <h3 className="font-bold text-slate-900">Xem lộ trình</h3>
-                <p className="text-sm text-slate-500 mt-1">Khám phá các bước chân tiếp theo trong ngành lập trình.</p>
+                <h3 className="font-bold text-foreground">Xem lộ trình</h3>
+                <p className="text-sm text-muted-foreground mt-1">Khám phá các bước chân tiếp theo trong ngành lập trình.</p>
               </div>
             </div>
 
             {/* Current Roadmap Progress Placeholder */}
-            <div className="bg-slate-50 border border-slate-100 p-8 rounded-3xl">
+            <div className="bg-muted/30 border border-border p-8 rounded-3xl">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <BookOpen className="h-5 w-5 text-blue-600" />
                   Tiến độ lộ trình
                 </h2>
@@ -138,17 +138,17 @@ export default function Dashboard() {
               </div>
               
               <div className="space-y-6">
-                <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                <div className="bg-card p-6 rounded-2xl border border-border shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-bold text-slate-900">Lập trình cơ bản cho Newbie</span>
-                    <span className="text-sm font-bold text-slate-500">65%</span>
+                    <span className="font-bold text-foreground">Lập trình cơ bản cho Newbie</span>
+                    <span className="text-sm font-bold text-muted-foreground">65%</span>
                   </div>
-                  <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-blue-600 rounded-full w-[65%]" />
                   </div>
                 </div>
                 <div className="flex items-center justify-center py-4">
-                  <p className="text-sm text-slate-400 italic">Mở rộng danh mục để xem các môn học khác</p>
+                  <p className="text-sm text-muted-foreground italic">Mở rộng danh mục để xem các môn học khác</p>
                 </div>
               </div>
             </div>
@@ -156,9 +156,9 @@ export default function Dashboard() {
 
           {/* Sidebar: Todo List */}
           <div className="space-y-8">
-            <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-sm">
+            <div className="bg-card border border-border rounded-3xl p-6 shadow-sm">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                   <ListTodo className="h-5 w-5 text-blue-600" />
                   Nhiệm vụ hôm nay
                 </h2>
@@ -169,7 +169,7 @@ export default function Dashboard() {
                 <input
                   type="text"
                   placeholder="Thêm nhiệm vụ mới..."
-                  className="w-full bg-slate-50 border-none rounded-xl py-3 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full bg-muted border-none rounded-xl py-3 pl-4 pr-12 text-sm focus:ring-2 focus:ring-blue-500 outline-none text-foreground"
                   value={newTodo}
                   onChange={(e) => setNewTodo(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addTodo()}
@@ -186,7 +186,7 @@ export default function Dashboard() {
               <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {pendingTodos.length === 0 && completedTodos.length === 0 && (
                   <div className="text-center py-8">
-                    <p className="text-sm text-slate-400">Hôm nay bạn chưa có kế hoạch gì?</p>
+                    <p className="text-sm text-muted-foreground">Hôm nay bạn chưa có kế hoạch gì?</p>
                   </div>
                 )}
                 
@@ -194,17 +194,17 @@ export default function Dashboard() {
                   <div key={todo.id} className="flex items-start gap-3 group animate-in fade-in slide-in-from-left-2 duration-200">
                     <button 
                       onClick={() => toggleTodo(todo.id, false)}
-                      className="mt-0.5 text-slate-300 hover:text-blue-500 transition-colors"
+                      className="mt-0.5 text-muted-foreground hover:text-blue-500 transition-colors"
                     >
                       <Circle className="h-5 w-5" />
                     </button>
-                    <span className="text-sm font-medium text-slate-700 leading-tight">{todo.task}</span>
+                    <span className="text-sm font-medium text-foreground leading-tight">{todo.task}</span>
                   </div>
                 ))}
 
                 {completedTodos.length > 0 && (
                   <div className="pt-4 space-y-4">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Đã hoàn thành</p>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Đã hoàn thành</p>
                     {completedTodos.map(todo => (
                       <div key={todo.id} className="flex items-start gap-3 opacity-50 grayscale transition-all">
                         <button 
@@ -213,7 +213,7 @@ export default function Dashboard() {
                         >
                           <CheckCircle2 className="h-5 w-5" />
                         </button>
-                        <span className="text-sm font-medium text-slate-700 line-through leading-tight">{todo.task}</span>
+                        <span className="text-sm font-medium text-foreground line-through leading-tight">{todo.task}</span>
                       </div>
                     ))}
                   </div>
