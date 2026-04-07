@@ -25,6 +25,8 @@ import CareerOrientation from "@/pages/CareerOrientation";
 import CodeAnalyzer from "./pages/CodeAnalyzer";
 import OperatorDashboard from "./pages/operator/OperatorDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import CourseManagement from "./pages/admin/CourseManagement";
+
 // Khởi tạo React Query để quản lý bộ nhớ đệm (Cache) dữ liệu
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -92,6 +94,7 @@ function AppRoutes() {
 
       {/* 4. Các trang dành cho quản trị (Admin) */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={["admin"]}><CourseManagement /></ProtectedRoute>} />
 
       {/* 404 - Trang không tìm thấy */}
       <Route path="*" element={<NotFound />} />

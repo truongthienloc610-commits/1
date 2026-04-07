@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminDashboard() {
   const { toast } = useToast();
@@ -88,6 +89,51 @@ export default function AdminDashboard() {
     }, 3000);
   };
 
+  // Xuất báo cáo CSV
+  const handleExportCSV = async () => {
+    try {
+      const { data: logs, error } = await supabase
+        .from('ai_logs')
+        .select('*');
+      
+      if (error) throw error;
+      if (!logs || logs.length === 0) {
+        toast({ title: "Không có dữ liệu", description: "Hiện chưa có log AI nào để xuất.", variant: "destructive" });
+        return;
+      }
+
+      // Tạo nội dung CSV
+      const headers = ["ID", "Prompt", "Response", "Rating", "Latency (ms)", "Status", "Time"];
+      const csvContent = [
+        headers.join(","),
+        ...logs.map(log => [
+          log.id,
+          `"${log.prompt?.replace(/"/g, '""')}"`,
+          `"${log.response?.replace(/"/g, '""')}"`,
+          log.rating || "N/A",
+          log.latency_ms || 0,
+          log.status,
+          new Date(log.created_at).toLocaleString('vi-VN')
+        ].join(","))
+      ].join("\n");
+
+      // Tải tệp xuống
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `EduAI_Stats_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({ title: "Đã xuất báo cáo! 📄", description: "Tệp CSV đã được tải xuống máy tính của bạn." });
+    } catch (error: any) {
+      toast({ title: "Lỗi xuất báo cáo", description: error.message, variant: "destructive" });
+    }
+  };
+
   const users = [
     { id: 1, name: "Nguyễn Văn A", email: "vana@gmail.com", role: "user", status: "active", joinDate: "12/03/2024" },
     { id: 2, name: "Trần Thị B", email: "thib@gmail.com", role: "operator", status: "active", joinDate: "15/03/2024" },
@@ -110,6 +156,14 @@ export default function AdminDashboard() {
           <div className="flex gap-3">
             <Button 
               variant="outline"
+              onClick={handleExportCSV}
+              className="h-14 px-6 rounded-2xl border-slate-200 font-black gap-3 hover:bg-slate-50 transition-all text-slate-600"
+            >
+              <BarChart3 className="h-5 w-5" />
+              Xuất báo cáo (CSV)
+            </Button>
+            <Button 
+              variant="outline"
               onClick={handleGithubPush}
               disabled={isSyncing}
               className="h-14 px-6 rounded-2xl border-slate-200 font-black gap-3 hover:bg-slate-50 transition-all"
@@ -121,6 +175,7 @@ export default function AdminDashboard() {
               <UserPlus className="h-5 w-5" /> Thêm thành viên
             </Button>
           </div>
+
         </div>
 
         {/* Quick Actions & Settings */}

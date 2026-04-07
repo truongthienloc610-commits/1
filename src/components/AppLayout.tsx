@@ -45,6 +45,7 @@ const navItems = [
   
   // QUẢN TRỊ (Admin)
   { to: "/admin/dashboard", icon: ShieldCheck, label: "Quản trị & Thống kê", roles: ["admin"] },
+  { to: "/admin/courses", icon: Map, label: "Quản lý Khóa học", roles: ["admin"] },
   
   { to: "/profile", icon: User, label: "Hồ sơ", roles: ["user", "operator", "admin"] },
 ];
