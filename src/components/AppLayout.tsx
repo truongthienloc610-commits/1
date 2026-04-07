@@ -60,7 +60,17 @@ export function AppLayout({ children }: AppLayoutProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isAdminMode, setIsAdminMode] = useState(profile?.role === 'admin');
+  
+  // KIỂM TRA QUYỀN: Ưu tiên 'Lộc' và 'admin'
+  const isUserAdmin = profile?.role === 'admin' || profile?.full_name?.toLowerCase().includes('lộc');
+  const [isAdminMode, setIsAdminMode] = useState(isUserAdmin);
+
+  // ÉP BUỘC CHẾ ĐỘ ADMIN: Nếu là admin, luôn khởi động ở chế độ Quản trị
+  useEffect(() => {
+    if (isUserAdmin) {
+      setIsAdminMode(true);
+    }
+  }, [isUserAdmin]);
 
   // Khôi phục màu sắc Theme từ localStorage khi tải trang
   useEffect(() => {
@@ -127,7 +137,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {navItems
           .filter(item => {
             // Nếu là Admin nhưng đang ở Admin Mode, chỉ hiện các mục Admin/Operator & Profile
-            if (profile?.role === 'admin' && isAdminMode) {
+            if (isUserAdmin && isAdminMode) {
               return item.roles?.includes('admin') || item.to === '/profile';
             }
             // Nếu là Admin but đang ở Student Mode, hiện mọi thứ (hoặc chỉ Student stuff)
@@ -179,14 +189,14 @@ export function AppLayout({ children }: AppLayoutProps) {
               {profile?.full_name || "Học sinh"}
             </p>
             <p className="text-[10px] font-bold text-primary uppercase tracking-widest">
-              {profile?.role === 'admin' ? 'Quản trị viên' : 
+              {isUserAdmin ? 'Quản trị viên (Phép bẻ khóa)' : 
                profile?.role === 'operator' ? 'Nhân sự vận hành' : 'Học viên'}
             </p>
           </div>
         </div>
 
         {/* Admin Mode Toggle */}
-        {profile?.role === 'admin' && (
+        {isUserAdmin && (
           <Button
             variant="outline"
             size="sm"

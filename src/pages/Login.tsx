@@ -44,8 +44,26 @@ export default function Login() {
     if (error) {
       toast({ title: "Đăng nhập thất bại", description: error.message, variant: "destructive" });
     } else {
-      toast({ title: "Chào mừng trở lại! 🎉" });
-      navigate("/dashboard");
+      // Sau khi đăng nhập Auth thành công, lấy profile để kiểm tra quyền
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('edu_profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        
+        toast({ title: "Chào mừng trở lại! 🎉" });
+        
+        // Điều hướng thông minh dựa trên vai trò
+        if (profile?.role === 'admin') {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      } else {
+        navigate("/dashboard");
+      }
     }
   };
 

@@ -6,7 +6,7 @@ import {
   ArrowRight, BookOpen, Clock, Zap, Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ interface Todo {
 
 export default function Dashboard() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [loading, setLoading] = useState(true);
@@ -75,6 +76,13 @@ export default function Dashboard() {
 
   const pendingTodos = todos.filter(t => !t.is_completed);
   const completedTodos = todos.filter(t => t.is_completed);
+
+  // ÉP BUỘC Admin phải vào đúng trang quản trị
+  useEffect(() => {
+    if (profile?.role === 'admin') {
+      navigate('/admin/dashboard');
+    }
+  }, [profile?.role, navigate]);
 
   return (
     <AppLayout>
